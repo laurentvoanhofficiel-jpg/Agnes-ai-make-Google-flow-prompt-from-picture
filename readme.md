@@ -1,5 +1,8 @@
 # 🎬 Visual.Studio — Film Factory
 
+vous pouvez continuer le développement avec l'intelligence artificielle sur ce lien il m'a servi à construire le code source : https://chat.deepseek.com/share/gm8jm5dky41soy3lva
+
+
 > **Un scénario · deux visages · 100 plans prêts à copier · prompts image + vidéo optimisés pour Google Flow / Veo**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

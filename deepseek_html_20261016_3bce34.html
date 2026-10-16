@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Visual.Studio — Film Factory</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;background:#020617;color:#f1f5f9;min-height:100vh;padding:1rem 1rem 4rem;font-size:14px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto}
+header{text-align:center;padding:1.5rem 0;border-bottom:1px solid #1e293b;margin-bottom:1.5rem}
+h1{font-family:Georgia,serif;font-size:2.2rem;font-weight:300;letter-spacing:.02em;margin-bottom:.4rem;background:linear-gradient(135deg,#e87b35 0%,#e5c15a 30%,#a8d8c8 50%,#c8b0e0 75%,#8b5fc4 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.05}
+.sub{font-family:Georgia,serif;font-style:italic;font-size:.85rem;color:#64748b}
+.kata{font-size:.7rem;letter-spacing:.4em;color:#fbbf24;opacity:.75;text-transform:uppercase;margin-bottom:.5rem}
+.banner{background:linear-gradient(135deg,rgba(139,95,196,.06),rgba(16,185,129,.05));border:1px solid #1e293b;border-left:2px solid #a78bfa;border-radius:4px;padding:1rem 1.15rem;font-size:.78rem;color:#94a3b8;margin-bottom:1.2rem;line-height:1.6}
+.banner strong{color:#f1f5f9;font-weight:600}
+.banner .hl-v{color:#c4b5fd}.banner .hl-e{color:#6ee7b7}.banner .hl-a{color:#fcd34d}
+.card{background:#0f172a;border:1px solid #1e293b;border-radius:4px;margin-bottom:1rem;overflow:hidden}
+.card-head{padding:.85rem 1rem;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:#e2e8f0;font-weight:600}
+.card-head .badge{font-size:.6rem;padding:.15rem .5rem;border:1px solid #b45309;color:#fbbf24;border-radius:2px;letter-spacing:.1em}
+.card-body{padding:1rem}
+textarea,input[type=text],input[type=password],select{width:100%;background:#020617;border:1px solid #1e293b;border-radius:4px;padding:.7rem .85rem;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:.78rem;color:#f1f5f9;outline:none}
+select{cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;font-size:.82rem;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#94a3b8 50%),linear-gradient(135deg,#94a3b8 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:2rem}
+select optgroup{background:#0f172a;color:#fbbf24;font-style:normal;font-weight:700;font-size:.78rem}
+select option{background:#0f172a;color:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;padding:.4rem}
+textarea:focus,input:focus,select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+textarea{min-height:90px;resize:vertical;line-height:1.55}
+textarea.scenario{min-height:150px;font-size:.82rem;line-height:1.65;border-color:#4c1d95}
+textarea.scenario:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+textarea:disabled,input:disabled,select:disabled{opacity:.5;cursor:not-allowed}
+.btn{width:100%;padding:.85rem;border-radius:4px;font-size:.78rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border:1px solid;transition:all .15s}
+.btn-amber{background:linear-gradient(135deg,rgba(232,123,53,.15),rgba(229,193,90,.1));border-color:#b45309;color:#fcd34d}
+.btn-amber:hover:not(:disabled){background:rgba(245,158,11,.2)}
+.btn-amber:disabled{opacity:.3;cursor:not-allowed}
+.btn-big{padding:1.15rem;font-size:.95rem;letter-spacing:.2em}
+.btn-red{background:transparent;border-color:#b91c1c;color:#f87171}
+.btn-slate{background:transparent;border-color:#334155;color:#94a3b8;font-size:.68rem;padding:.6rem}
+.btn-slate:hover:not(:disabled){color:#fcd34d;border-color:#b45309}
+.btn-slate:disabled{opacity:.4;cursor:not-allowed}
+.btn-green{background:linear-gradient(135deg,rgba(16,185,129,.15),rgba(52,211,153,.08));border-color:#065f46;color:#6ee7b7}
+.btn-green:hover:not(:disabled){background:rgba(16,185,129,.25)}
+.row{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.row .btn{width:auto;flex:1;min-width:120px}
+.status-line{display:flex;align-items:center;gap:.5rem;padding:.6rem .85rem;background:#020617;border:1px solid #1e293b;border-radius:4px;font-size:.75rem;color:#64748b;margin-top:.7rem}
+.status-line.ok{background:rgba(16,185,129,.08);border-color:#065f46;color:#34d399}
+.status-line.err{background:rgba(239,68,68,.08);border-color:#7f1d1d;color:#f87171}
+.status-line .dot{width:6px;height:6px;border-radius:50%;background:#475569;flex-shrink:0}
+.status-line.ok .dot{background:#10b981;box-shadow:0 0 6px #10b981}
+.status-line.err .dot{background:#ef4444}
+.hint{font-size:.7rem;color:#64748b;margin-top:.5rem}
+.hint a{color:#60a5fa;text-decoration:none;border-bottom:1px dotted #1e40af}
+.style-desc{margin-top:.6rem;padding:.7rem .9rem;background:#020617;border-left:2px solid #a78bfa;border-radius:4px;font-size:.75rem;color:#cbd5e1;line-height:1.55;display:none}
+.style-desc.visible{display:block}
+.style-desc .sd-name{font-family:Georgia,serif;color:#fcd34d;font-size:.9rem;margin-bottom:.3rem}
+.style-desc .sd-medium{font-family:ui-monospace,monospace;font-size:.68rem;color:#a78bfa;margin-bottom:.4rem}
+
+/* Characters */
+.chars-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.chars-grid{grid-template-columns:1fr 1fr}}
+.char-slot{background:#020617;border:1px solid #1e293b;border-radius:4px;padding:.85rem;display:flex;flex-direction:column;gap:.6rem}
+.char-slot .cs-head{display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#a78bfa;font-weight:700}
+.char-slot .cs-head .badge{font-size:.58rem;padding:.1rem .4rem;border:1px solid #334155;border-radius:2px;color:#64748b}
+.char-slot .cs-body{display:flex;gap:.7rem;align-items:flex-start}
+.char-slot .cs-thumb{width:110px;height:110px;border-radius:4px;border:1px dashed #334155;background:#0f172a;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer}
+.char-slot .cs-thumb:hover{border-color:#b45309}
+.char-slot .cs-thumb input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.char-slot .cs-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.char-slot .cs-thumb .ph{color:#475569;font-size:.62rem;text-align:center;padding:.3rem;line-height:1.3}
+.char-slot .cs-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:.4rem}
+.char-slot .cs-fields input{font-size:.78rem}
+.char-slot .cs-dna{font-size:.65rem;color:#94a3b8;font-family:ui-monospace,monospace;line-height:1.45;max-height:70px;overflow-y:auto;background:#020617;border:1px solid #1e293b;border-radius:3px;padding:.4rem .5rem;margin-top:.3rem;display:none}
+.char-slot .cs-dna.visible{display:block}
+.char-slot .cs-dna .ok{color:#6ee7b7}
+
+/* Progress */
+.phase{background:#0f172a;border:1px solid #1e293b;border-left:2px solid #8b5cf6;border-radius:4px;padding:.85rem 1rem;margin-bottom:1rem;display:none}
+.phase.visible{display:block}
+.steps{display:flex;gap:.3rem;margin-bottom:.6rem;flex-wrap:wrap}
+.step{flex:1;min-width:60px;padding:.4rem .3rem;text-align:center;font-size:.55rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;background:#020617;border:1px solid #1e293b;border-radius:4px;color:#475569}
+.step.active{background:rgba(245,158,11,.08);border-color:#b45309;color:#fcd34d}
+.step.done{background:rgba(16,185,129,.08);border-color:#065f46;color:#34d399}
+.phase-info{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem;font-size:.72rem;font-family:ui-monospace,monospace;color:#94a3b8}
+
+/* Story panel */
+.scenario-panel{display:none;background:#0f172a;border:1px solid #1e293b;border-left:3px solid #a78bfa;border-radius:4px;padding:1.1rem 1.2rem;margin-bottom:1rem}
+.scenario-panel.visible{display:block}
+.scenario-title{font-family:Georgia,serif;font-size:1.5rem;color:#fcd34d;letter-spacing:.03em;margin-bottom:.3rem}
+.scenario-logline{font-family:Georgia,serif;font-style:italic;color:#c4b5fd;font-size:.85rem;line-height:1.6;margin-bottom:.9rem}
+.scenario-section{margin-top:.7rem;font-size:.75rem;line-height:1.55}
+.scenario-section .k{font-family:ui-monospace,monospace;font-size:.62rem;letter-spacing:.15em;color:#fbbf24;text-transform:uppercase;display:block;margin-bottom:.3rem}
+.scenario-section ul{margin-left:1.2rem}
+.scenario-section li{margin-bottom:.25rem;color:#94a3b8}
+.scenario-section li strong{color:#e2e8f0}
+.scenario-section li em{color:#a78bfa;font-style:italic}
+.beat-card{background:#020617;border:1px solid #1e293b;border-left:2px solid #8b5cf6;border-radius:4px;padding:.6rem .8rem;margin-bottom:.5rem}
+.beat-card .bt{font-family:Georgia,serif;color:#c4b5fd;font-size:.8rem;font-weight:600;margin-bottom:.2rem}
+.beat-card .bs{font-size:.72rem;color:#94a3b8;line-height:1.5}
+.beat-card .bk{font-size:.68rem;color:#6ee7b7;margin-top:.3rem;font-style:italic}
+
+/* Viewer */
+.viewer{display:none;background:#0f172a;border:1px solid #1e293b;border-radius:4px;margin-bottom:1rem;overflow:hidden}
+.viewer.visible{display:block}
+.viewer-head{background:linear-gradient(135deg,rgba(139,95,196,.1),rgba(16,185,129,.05));padding:.85rem 1rem;border-bottom:1px solid #1e293b;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.viewer-head .vh-title{font-family:Georgia,serif;font-size:1rem;color:#fcd34d;letter-spacing:.05em}
+.viewer-head .vh-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+.viewer-nav{padding:.7rem 1rem;border-bottom:1px solid #1e293b;display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.viewer-nav .vbtn{padding:.5rem .9rem;border-radius:4px;border:1px solid #334155;background:transparent;color:#f1f5f9;cursor:pointer;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .15s}
+.viewer-nav .vbtn:hover:not(:disabled){background:rgba(245,158,11,.1);border-color:#b45309;color:#fcd34d}
+.viewer-nav .vbtn:disabled{opacity:.3;cursor:not-allowed}
+.viewer-nav .counter{margin-left:auto;font-family:ui-monospace,monospace;font-size:.78rem;color:#fbbf24;font-weight:700}
+.viewer-nav input[type=number]{width:70px;background:#020617;border:1px solid #334155;border-radius:4px;color:#f1f5f9;padding:.4rem .5rem;font-family:ui-monospace,monospace;font-size:.72rem;text-align:center}
+.viewer-card{padding:1.2rem}
+.vc-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;margin-bottom:.8rem}
+.vc-idx{font-family:ui-monospace,monospace;font-size:.75rem;color:#fbbf24;font-weight:700;letter-spacing:.1em}
+.vc-label{font-family:Georgia,serif;font-size:1.4rem;color:#fcd34d;letter-spacing:.02em;line-height:1.2;margin-top:.2rem}
+.vc-beat{font-family:Georgia,serif;font-style:italic;font-size:.85rem;color:#c4b5fd;line-height:1.5;margin-top:.4rem}
+.vc-type-badge{font-family:ui-monospace,monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;padding:.25rem .6rem;border-radius:3px;font-weight:700;border:1px solid}
+.vc-type-badge.decor{background:rgba(236,72,153,.1);color:#f472b6;border-color:#831843}
+.vc-type-badge.heros{background:rgba(245,158,11,.1);color:#fbbf24;border-color:#92400e}
+.vc-type-badge.second{background:rgba(139,92,246,.1);color:#a78bfa;border-color:#5b21b6}
+.vc-type-badge.duo{background:rgba(59,130,246,.1);color:#60a5fa;border-color:#1e40af}
+.vc-type-badge.groupe{background:rgba(59,130,246,.1);color:#60a5fa;border-color:#1e40af}
+.vc-type-badge.autres{background:rgba(16,185,129,.1);color:#34d399;border-color:#065f46}
+.vc-type-badge.detail{background:rgba(234,179,8,.1);color:#facc15;border-color:#854d0e}
+.pblock{background:#020617;border:1px solid #1e293b;border-radius:4px;padding:.9rem 1rem;margin-bottom:.8rem;position:relative}
+.pblock.image{border-left:3px solid #f59e0b}
+.pblock.video{border-left:3px solid #7c3aed}
+.pblock.fr-block{border-left:3px solid #10b981}
+.pblock .plabel{font-family:ui-monospace,monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin-bottom:.55rem;display:block}
+.pblock.image .plabel{color:#fbbf24}
+.pblock.video .plabel{color:#a78bfa}
+.pblock.fr-block .plabel{color:#34d399}
+.pblock .ptext{font-family:ui-monospace,monospace;font-size:.72rem;color:#cbd5e1;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.pblock .ptext.en{color:#e2e8f0}
+.pblock .ptext.fr{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;font-size:.8rem;color:#cbd5e1}
+.pblock .ptext.fr .speaker{color:#c4b5fd;font-weight:700}
+.pblock .ptext.fr .dlg{color:#fcd34d;font-style:italic}
+.pblock .ptext.fr .sfx{color:#6ee7b7}
+.vc-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem}
+.vc-actions .btn{width:auto;flex:1;min-width:150px}
+.vc-copy-msg{font-size:.68rem;color:#6ee7b7;margin-top:.4rem;text-align:center;opacity:0;transition:opacity .3s}
+.vc-copy-msg.visible{opacity:1}
+
+/* Strip */
+.viewer-strip{padding:.7rem 1rem;border-top:1px solid #1e293b;background:#020617;display:flex;flex-wrap:wrap;gap:.25rem;max-height:160px;overflow-y:auto}
+.strip-cell{width:26px;height:26px;border-radius:3px;border:1px solid #334155;background:#0f172a;color:#64748b;font-family:ui-monospace,monospace;font-size:.55rem;font-weight:700;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;padding:0}
+.strip-cell:hover{transform:scale(1.15);z-index:2}
+.strip-cell.active{outline:2px solid #fbbf24;outline-offset:1px;color:#020617}
+.strip-cell.decor{background:rgba(236,72,153,.35);color:#fce7f3}
+.strip-cell.heros{background:rgba(245,158,11,.35);color:#fef3c7}
+.strip-cell.second{background:rgba(139,92,246,.35);color:#ede9fe}
+.strip-cell.duo,.strip-cell.groupe{background:rgba(59,130,246,.35);color:#dbeafe}
+.strip-cell.autres{background:rgba(16,185,129,.35);color:#d1fae5}
+.strip-cell.detail{background:rgba(234,179,8,.35);color:#fef9c3}
+
+/* Panel */
+.panel{position:fixed;bottom:0;left:0;right:0;z-index:40}
+.handle{background:#0f172a;border-top:2px solid #b45309;padding:.55rem 1rem;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.handle .left{display:flex;align-items:center;gap:.6rem;min-width:0;flex:1}
+.handle .toggle{font-family:ui-monospace,monospace;font-size:.72rem;color:#fbbf24;letter-spacing:.1em}
+.handle .latest{font-size:.72rem;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.handle .actions{display:flex;gap:.3rem}
+.handle .actions button{font-size:.6rem;padding:.2rem .5rem;border:1px solid #334155;border-radius:3px;background:transparent;color:#64748b;cursor:pointer}
+.handle .actions button:hover{color:#fcd34d;border-color:#b45309}
+.panel-content{background:#020617;border-top:1px solid #1e293b;max-height:55vh;overflow-y:auto}
+.panel-content.hidden{display:none}
+.human-log{max-height:100px;overflow-y:auto;padding:.6rem 1rem;border-bottom:1px solid #1e293b;font-family:ui-monospace,monospace;font-size:.7rem}
+.human-log>div{margin-bottom:.2rem}
+.human-log .t{color:#475569}
+.human-log .m{color:#34d399}
+.debug-log{max-height:240px;overflow-y:auto;padding:.6rem 1rem;font-family:ui-monospace,monospace;font-size:.68rem}
+.debug-log>div{margin-bottom:.15rem;word-break:break-word}
+.debug-log .t{color:#475569}
+.debug-log .info{color:#94a3b8}.debug-log .ok{color:#34d399}.debug-log .warn{color:#fbbf24}.debug-log .err{color:#f87171}.debug-log .api{color:#60a5fa}
+.toast{position:fixed;top:1rem;left:50%;transform:translateX(-50%) translateY(-120px);background:#0f172a;border:1px solid #1e293b;border-left:3px solid #fbbf24;border-radius:4px;padding:.75rem 1.2rem;font-size:.8rem;z-index:1000;opacity:0;transition:transform .3s,opacity .3s;max-width:90vw;text-align:center}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.success{border-left-color:#10b981}.toast.error{border-left-color:#ef4444}.toast.warn{border-left-color:#f59e0b}
+.status-bar{position:fixed;bottom:60px;left:0;right:0;background:#0f172a;border-top:1px solid #1e293b;padding:.5rem 1rem;font-size:.7rem;font-family:ui-monospace,monospace;color:#f1f5f9;display:flex;align-items:center;gap:.5rem;transform:translateY(100%);transition:transform .3s;z-index:30}
+.status-bar.visible{transform:translateY(0)}
+.status-bar .spinner{width:12px;height:12px;border:2px solid rgba(245,158,11,.2);border-top-color:#f59e0b;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:#0f172a}
+::-webkit-scrollbar-thumb{background:#334155;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#475569}
+.hidden{display:none!important}
+body.locked .drop,body.locked .char-slot .cs-thumb{pointer-events:none;opacity:.6}
+body.locked .card-head::after{content:' · 🔒';color:#fbbf24;font-size:.65rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+<div class="kata">武 · Visual.Studio · Film Factory</div>
+<h1>Visual.Studio</h1>
+<p class="sub">Un scénario · deux visages · 100 plans prêts à copier · prompts image + vidéo</p>
+</header>
+
+<div class="banner">
+<strong>Principe :</strong> ajoutez vos <strong class="hl-v">clés API</strong>, choisissez un <strong class="hl-a">style</strong> dans la liste, ajoutez <strong class="hl-e">1 ou 2 photos de personnages</strong>, écrivez le <strong class="hl-a">scénario</strong>. En <strong>un seul clic</strong> : l'IA analyse les visages, écrit l'histoire, puis produit <strong>100 plans cohérents</strong> — chacun avec son <strong>prompt image (EN+FR)</strong> et son <strong>prompt vidéo Google Flow (EN + dialogue FR)</strong>. Un bouton copie les deux d'un coup. Aucune image générée ici.
+</div>
+
+<section class="card">
+<div class="card-head"><span>🔑 Clés API Agnes</span><span class="badge" id="keyBadge">0 validée</span></div>
+<div class="card-body">
+<textarea id="keysInput" placeholder="Collez vos clés API ici, une par ligne :&#10;sk-xxxxxxxxxxxx&#10;sk-yyyyyyyyyyyy" autocomplete="off" spellcheck="false"></textarea>
+<div class="row">
+<button class="btn btn-amber" id="validateBtn">🔐 Valider et enregistrer</button>
+<button class="btn btn-slate" id="clearBtn" style="max-width:120px;min-width:80px;">Effacer</button>
+</div>
+<div class="status-line" id="keyStatus"><span class="dot"></span><span id="keyStatusText">Aucune clé enregistrée</span></div>
+<div class="hint">Clé sur <a href="https://platform.agnes-ai.com" target="_blank">platform.agnes-ai.com</a> → Settings → API Keys.</div>
+</div>
+</section>
+
+<section class="card">
+<div class="card-head"><span>🎨 Style du film</span><span class="badge">Liste déroulante</span></div>
+<div class="card-body">
+<select id="styleSelect"></select>
+<div class="style-desc" id="styleDesc">
+<div class="sd-name" id="sdName"></div>
+<div class="sd-medium" id="sdMedium"></div>
+<div id="sdBody"></div>
+</div>
+</div>
+</section>
+
+<section class="card">
+<div class="card-head"><span>👥 Personnages (photos optionnelles)</span><span class="badge" id="charBadge">0 / 2</span></div>
+<div class="card-body">
+<div class="chars-grid">
+<div class="char-slot">
+<div class="cs-head"><span>⭐ Personnage A — Protagoniste</span><span class="badge">Optionnel</span></div>
+<div class="cs-body">
+<label class="cs-thumb" id="charAThumb">
+<input type="file" accept="image/*" id="charAInput">
+<div class="ph" id="charAPlaceholder">📷<br>Photo A</div>
+<img id="charAImg" style="display:none" alt="">
+</label>
+<div class="cs-fields">
+<input type="text" id="charAName" placeholder="Prénom (optionnel — ex : Élise)" autocomplete="off">
+<button class="btn btn-slate" id="charARemoveBtn" style="font-size:.62rem;padding:.4rem;">Retirer la photo A</button>
+</div>
+</div>
+<div class="cs-dna" id="charADna"></div>
+</div>
+<div class="char-slot">
+<div class="cs-head"><span>🌟 Personnage B — Second rôle</span><span class="badge">Optionnel</span></div>
+<div class="cs-body">
+<label class="cs-thumb" id="charBThumb">
+<input type="file" accept="image/*" id="charBInput">
+<div class="ph" id="charBPlaceholder">📷<br>Photo B</div>
+<img id="charBImg" style="display:none" alt="">
+</label>
+<div class="cs-fields">
+<input type="text" id="charBName" placeholder="Prénom (optionnel — ex : Marc)" autocomplete="off">
+<button class="btn btn-slate" id="charBRemoveBtn" style="font-size:.62rem;padding:.4rem;">Retirer la photo B</button>
+</div>
+</div>
+<div class="cs-dna" id="charBDna"></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="card">
+<div class="card-head"><span>🎬 Scénario du film</span><span class="badge" id="scenarioBadge">0 mot</span></div>
+<div class="card-body">
+<textarea id="scenarioInput" class="scenario" placeholder="Racontez votre film : intrigue, personnages, lieux, ton, époque, ambiance…&#10;&#10;Ex : « Un influenceur TikTok découvre qu'il est un super-héros cyberpunk. Il doit réparer une IA malfaisante en lui injectant les trois lois de la robotique d'Asimov. Univers rétro-futuriste mêlant samouraïs anciens et hyper-technologie. »" rows="8" spellcheck="false"></textarea>
+<div class="hint">Le scénario dirige tout : intrigue, dialogues, décors, costumes et progression dramatique.</div>
+</div>
+</section>
+
+<section class="card">
+<div class="card-head"><span>✍️ Notes artistiques (optionnel)</span><span class="badge" id="promptBadge">0 mot</span></div>
+<div class="card-body">
+<textarea id="promptInput" placeholder="Ex : Costumes extravagants, décors très détaillés, palette chaude, références Moebius + Gaudí + Mucha…" rows="3" spellcheck="false"></textarea>
+</div>
+</section>
+
+<button class="btn btn-amber btn-big" id="genBtn" disabled style="margin-bottom:1rem;">▸ Créer le film (100 plans)</button>
+<button class="btn btn-red hidden" id="stopBtn" style="margin-bottom:1rem;">⏹ Arrêter</button>
+
+<div class="phase" id="phaseBar">
+<div class="steps">
+<div class="step" data-p="avatar">1 · Avatars</div>
+<div class="step" data-p="story">2 · Scénario</div>
+<div class="step" data-p="shots">3 · 100 plans</div>
+<div class="step" data-p="ready">4 · Prêt</div>
+</div>
+<div class="phase-info"><span id="phaseDetail">En attente</span><span id="phaseEta"></span></div>
+</div>
+
+<div class="scenario-panel" id="scenarioPanel">
+<div class="scenario-title" id="scenarioPanelTitle">—</div>
+<div class="scenario-logline" id="scenarioPanelLogline"></div>
+<div id="scenarioPanelBody"></div>
+</div>
+
+<section class="viewer" id="viewer">
+<div class="viewer-head">
+<div class="vh-title" id="viewerTitle">🎬 Storyboard</div>
+<div class="vh-actions">
+<button class="btn btn-green" id="copyAllBtn" style="font-size:.68rem;padding:.5rem .8rem;width:auto;">📋 Tout copier</button>
+<button class="btn btn-slate" id="downloadBtn" style="font-size:.68rem;padding:.5rem .8rem;width:auto;">💾 Télécharger .txt</button>
+</div>
+</div>
+<div class="viewer-nav">
+<button class="vbtn" id="viewerPrevBtn">← Précédent</button>
+<button class="vbtn" id="viewerNextBtn">Suivant →</button>
+<input type="number" id="viewerJump" min="1" max="100" placeholder="#">
+<button class="vbtn" id="viewerJumpBtn">Aller</button>
+<div class="counter" id="viewerCounter">0 / 0</div>
+</div>
+<div class="viewer-card" id="viewerCard"></div>
+<div class="viewer-strip" id="viewerStrip"></div>
+</section>
+
+</div>
+
+<div class="panel">
+<div class="handle" id="panelHandle">
+<div class="left">
+<span class="toggle" id="panelToggle">▼ CONSOLE</span>
+<span class="latest" id="humanLatest">Prêt.</span>
+</div>
+<div class="actions">
+<button id="copyConsoleBtn">Copier</button>
+<button id="clearConsoleBtn">Effacer</button>
+</div>
+</div>
+<div class="panel-content hidden" id="panelContent">
+<div class="human-log" id="humanLog"></div>
+<div class="debug-log" id="debugLog"></div>
+</div>
+</div>
+
+<div class="toast" id="toast"><span id="toastText">Message</span></div>
+<div class="status-bar" id="statusBar"><div class="spinner"></div><span id="statusText">Préparation…</span></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════════════
+const API_BASE = 'https://apihub.agnes-ai.com/v1';
+const MODEL_TEXT = 'agnes-2.5-flash';
+const REF_MAX_SIDE = 1024;
+const CONCURRENCY_PER_KEY = 2;
+const DELAY_PER_KEY_MS = 3400;
+const KEYS_STORAGE   = 'vs_keys_v17';
+const PROMPT_STORAGE = 'vs_prompt_v17';
+const SCENARIO_STORAGE = 'vs_scenario_v17';
+const STYLE_STORAGE  = 'vs_style_v17';
+const CHAR_A_STORAGE = 'vs_charA_v17';
+const CHAR_B_STORAGE = 'vs_charB_v17';
+const DEBUG_MAX = 400;
+
+const SHOTS_TOTAL = 100;
+const SHOTS_PER_CHUNK = 20;
+const SHOT_CHUNKS = SHOTS_TOTAL / SHOTS_PER_CHUNK;
+
+// ═══════════════════════════════════════════════════════════════
+// STYLES — Liste déroulante groupée
+// ═══════════════════════════════════════════════════════════════
+const STYLE_GROUPS = [
+  { group: '🎥 Cinéma réaliste (10 réalisateurs)', items: [
+    { id:'wes_anderson', name:'Wes Anderson',
+      medium:'35mm film photography, anamorphic 2.39:1, symmetrical composition',
+      styleDna:'Wes Anderson cinematic style — perfectly symmetrical compositions, whimsical production design, pastel and muted palette (mustard yellow, dusty pink, mint green, brick red), flat frontal framing, dollhouse-like sets, deadpan faces, meticulous costume design, stage-like artificial lighting, 35mm Kodak film grain, storybook aesthetic',
+      videoHint:'Static symmetrical composition or slow precise lateral dolly, deadpan rhythm',
+      desc:'Symétrie parfaite, palette pastel, décors poupée, acteurs impassibles. Idéal pour des univers minutieusement chorégraphiés.' },
+    { id:'kubrick', name:'Stanley Kubrick',
+      medium:'35mm film, one-point perspective, wide-angle 18-25mm',
+      styleDna:'Stanley Kubrick cinematic style — perfect one-point perspective, clinical symmetry, wide-angle lenses (18-25mm), long slow tracking shots, stark contrast between warm interiors and cold exteriors, unsettling stillness, saturated colours with deep blacks, iconic stage-like set design, psychological unease',
+      videoHint:'Long steady tracking shot, one-point perspective, clinical precision',
+      desc:'Perspective centrale obsessionnelle, symétrie clinique, plans-séquences glacés. Étrangeté hypnotique.' },
+    { id:'chaplin', name:'Charlie Chaplin',
+      medium:'silent-era black and white film, 16fps softness, silver gelatin',
+      styleDna:'Charlie Chaplin silent-film style — black and white, slight undercranked softness, soft focus, vaudevillian staging, deeply human close-ups amid comic chaos, iris transitions, tender yet exaggerated performances, theatrical gestures, pure black-and-white tonal range',
+      videoHint:'Slightly speed-ramped physical comedy, expressive gestures, soft iris framing',
+      desc:'Noir et blanc muet, grâce burlesque, tendresse humaine. Le geste et l’émotion avant tout.' },
+    { id:'truffaut', name:'François Truffaut',
+      medium:'35mm film, natural light, French New Wave grain',
+      styleDna:'François Truffaut French New Wave style — handheld camera, natural light, documentary-like spontaneity, Parisian urban texture, freeze frames, voice-over narration, casual contemporary wardrobe, warm yet melancholic colour, sincere close-ups of faces, jazz-inflected energy',
+      videoHint:'Handheld tracking behind a walking character, natural light, quick pan',
+      desc:'Nouvelle Vague : caméra portée, lumière naturelle, Paris urbain, sincérité des visages.' },
+    { id:'hitchcock', name:'Alfred Hitchcock',
+      medium:'35mm Technicolor, suspense framing, deep shadows',
+      styleDna:'Alfred Hitchcock cinematic style — precise suspense framing, high-contrast lighting, bold compositional geometry, iconic silhouettes, saturated Technicolor, voyeuristic angles, close-ups on eyes and hands, dramatic shadows, mounting dread',
+      videoHint:'Slow push-in on a face, cross-cutting suspense, dramatic shadow reveal',
+      desc:'Suspense hitchcockien : cadres au cordeau, contrastes violents, ombres dramatiques.' },
+    { id:'kurosawa', name:'Akira Kurosawa',
+      medium:'35mm film, telephoto compression, Japanese setting',
+      styleDna:'Akira Kurosawa cinematic style — telephoto compression, multiple planes of action in depth, weather as emotion (rain, wind, dust), dynamic movement, deep staging, Noh-theatre influence in composition, monochrome or rich Technicolor, epic yet human scale',
+      videoHint:'Multiple planes of action in depth, telephoto compression, weather as emotion',
+      desc:'Plans comprimés au téléobjectif, plusieurs actions simultanées, météo dramatique.' },
+    { id:'fellini', name:'Federico Fellini',
+      medium:'35mm film, theatrical staging, surreal realism',
+      styleDna:'Federico Fellini cinematic style — theatrical staging, dreamlike crowded scenes, baroque costumes, surreal imagery mixed with everyday Italian life, dramatic artificial lighting, grotesque beauty, poetic absurdity, carnival-like atmosphere',
+      videoHint:'Slow circular dolly around theatrical tableau, surreal crowd movement',
+      desc:'Théâtre surréel, foules oniriques, costumes baroques, beauté grotesque.' },
+    { id:'lynch', name:'David Lynch',
+      medium:'35mm film, deep shadows, red-lit interiors',
+      styleDna:'David Lynch cinematic style — unsettling everyday surrealism, deep red and teal lighting, dream-logic, ominous textures, velvet curtains, industrial sound-design feel, ordinary faces with strange expressions, slow-burn tension, Americana gone wrong',
+      videoHint:'Slow eerie push-in, unsettling stillness, red-lit interior',
+      desc:'Surréalisme familier, rouge profond, tension sourde, étrangeté du quotidien.' },
+    { id:'tarantino', name:'Quentin Tarantino',
+      medium:'35mm film, saturated 70mm possible, period-specific',
+      styleDna:'Quentin Tarantino cinematic style — saturated colours, low-angle trunk shots, pulp aesthetic, retro references, dynamic dialogue staging, sharp editing rhythm, bold framing, period-specific detail, iconic characters',
+      videoHint:'Snappy low-angle inserts, dynamic two-shot dialogue staging, stylized rhythm',
+      desc:'Énergie pulp, cadres bas, saturation, esthétique vintage assumée.' },
+    { id:'villeneuve', name:'Denis Villeneuve',
+      medium:'digital 65mm, monumental scale, monochrome haze',
+      styleDna:'Denis Villeneuve cinematic style — monumental minimalist composition, extreme wide shots with tiny human subjects, monochrome or amber-teal palettes, brutalist architecture, atmospheric haze, deliberate pace, existential scale, Deakins-like precision',
+      videoHint:'Monumental slow reveal, wide vista with tiny subject, atmospheric haze',
+      desc:'Échelle monumentale, minimalisme, brume atmosphérique, architecture brutaliste.' }
+  ]},
+  { group: '🎌 Manga / Anime (10 styles)', items: [
+    { id:'ghibli', name:'Studio Ghibli (Miyazaki)',
+      medium:'cel animation, watercolour painted backgrounds',
+      styleDna:'Studio Ghibli animation style — soft watercolour painted backgrounds, cel animation characters, warm natural light, pastoral or magical settings, gentle wind motif, detailed food and nature, expressive large eyes, hand-crafted feel, nostalgic hopeful mood',
+      videoHint:'Slow camera drift revealing nature, wind movement in grass or hair, gentle atmosphere',
+      desc:'Aquarelles peintes, vents doux, nature luxuriante, chaleur nostalgique.' },
+    { id:'shinkai', name:'Makoto Shinkai',
+      medium:'digital anime, hyper-detailed photoreal environments',
+      styleDna:'Makoto Shinkai anime style — hyper-detailed photorealistic backgrounds, luminous skies with lens flares, glowing clouds, urban Japanese detail, soft pastel and saturated cyan-magenta palette, romantic melancholy, rain and light interplay, emotional compositions',
+      videoHint:'Rack focus on sky detail, slow pan across luminous clouds, rain glitter',
+      desc:'Ciels lumineux, Tokyo ultra-détaillée, mélancolie romantique, lumière magique.' },
+    { id:'kon', name:'Satoshi Kon',
+      medium:'anime, psychological realism',
+      styleDna:'Satoshi Kon anime style — psychological cinematic framing, reality-bending transitions, urban alienation, detailed character acting, muted palette with red accents, thriller tension, dreamlike narrative logic',
+      videoHint:'Unsettling slow push, reality-bending cut, psychological close-up',
+      desc:'Cinéma psychologique, transitions qui déforment la réalité, tension sourde.' },
+    { id:'otomo', name:'Katsuhiro Otomo (Akira)',
+      medium:'detailed anime, cyberpunk neo-Tokyo',
+      styleDna:'Katsuhiro Otomo Akira style — hyper-detailed mechanical and urban design, neo-Tokyo cyberpunk, dramatic lighting, sharp realistic proportions, saturated reds and neons, monumental destruction, dense line work, cinematic scope',
+      videoHint:'Kinetic action, bike chase, neon-lit street, dramatic reveal',
+      desc:'Néo-Tokyo cyberpunk ultra-détaillée, rouges saturés, ampleur monumentale.' },
+    { id:'shonen_bw', name:'Manga shōnen — noir et blanc',
+      medium:'black and white manga, screentone, ink lines',
+      styleDna:'Shōnen manga black-and-white style — bold ink lines, dynamic speed lines, expressive action poses, screentone shading, dramatic close-ups, high contrast, dramatic slanted panel feel, powerful sense of motion, energetic',
+      videoHint:'Dynamic action pose, speed lines, dramatic camera angle',
+      desc:'Traits d’encre puissants, lignes de vitesse, énergie et mouvement explosif.' },
+    { id:'seinen_bw', name:'Manga seinen — noir et blanc',
+      medium:'black and white manga, mature tone, refined linework',
+      styleDna:'Seinen manga black-and-white style — refined detailed line work, realistic proportions, mature themes, moody atmospheric shading, screentone gradients, cinematic paneling feel, introspective moments, subtle expressions',
+      videoHint:'Slow introspective push, atmospheric shading, quiet tension',
+      desc:'Trait raffiné et réaliste, atmosphères matures, instants introspectifs.' },
+    { id:'shojo', name:'Shojo manga pastel',
+      medium:'pastel colour, delicate linework, sparkles',
+      styleDna:'Shojo manga style — delicate line work, soft pastel colour, sparkling eyes, flowers and ribbon motifs, romantic atmosphere, dreamy backgrounds, decorative panel borders, emotional close-ups, gentle expression',
+      videoHint:'Soft romantic push-in, floating petals, sparkling detail',
+      desc:'Pastels délicats, fleurs, regards brillants, romantisme onirique.' },
+    { id:'anime_90s', name:'Anime cel-shading années 90',
+      medium:'cel animation, 90s TV anime look, hand-painted backgrounds',
+      styleDna:'1990s TV anime style — flat cel-shaded colours, visible outline, hand-painted backgrounds, slight grain, retro anime character design, dramatic zoom-ins, distinctive 90s colour palette, nostalgic TV broadcast feel',
+      videoHint:'Fast zoom-in on eyes, dramatic reaction, retro TV anime framing',
+      desc:'Cellulo années 90, contours visibles, couleurs plates, grain TV nostalgique.' },
+    { id:'anime_modern', name:'Anime moderne 2020s',
+      medium:'modern digital anime, vivid colour, cinematic lighting',
+      styleDna:'Modern 2020s anime style — crisp digital line art, vibrant colour, cinematic lighting effects, dynamic camera angles, detailed backgrounds, expressive eyes, high production value feel, contemporary anime aesthetic',
+      videoHint:'Cinematic dolly, dynamic angle, high-detail effects',
+      desc:'Trait net digital, couleurs vives, éclairages cinématographiques modernes.' },
+    { id:'webtoon', name:'Webtoon couleur',
+      medium:'vertical webtoon, soft digital colour, glossy highlights',
+      styleDna:'Webtoon colour style — soft digital colour, clean line work, romantic or thriller atmosphere, cinematic panel composition, glossy highlights, contemporary Korean webtoon aesthetic',
+      videoHint:'Soft vertical push, glossy highlight drift, contemporary feel',
+      desc:'Webtoon coréen contemporain, couleurs douces, brillances propres.' }
+  ]},
+  { group: '🎭 3D & Animation (8 styles)', items: [
+    { id:'pixar', name:'Pixar 3D',
+      medium:'3D CGI, cinematic render, subsurface scattering',
+      styleDna:'Pixar 3D animation style — cinematic CGI rendering, appealing rounded character design, expressive large eyes, subsurface skin scattering, soft global illumination, vivid saturated colour, detailed environments, emotional staging, family-friendly epic feel',
+      videoHint:'Smooth cinematic camera move, expressive character acting, warm lighting',
+      desc:'CGI cinématographique, personnages attachants, lumière globale douce, émotion.' },
+    { id:'dreamworks', name:'DreamWorks 3D',
+      medium:'3D CGI, expressive stylization, cinematic lighting',
+      styleDna:'DreamWorks 3D animation style — stylized CGI with exaggerated expressions, dynamic action staging, sharp character design, cinematic lighting, punchy colour, adventure energy',
+      videoHint:'Dynamic action camera, punchy expression, adventurous energy',
+      desc:'CGI stylisé, expressions exagérées, énergie d’aventure.' },
+    { id:'laika', name:'Stop-motion Laika',
+      medium:'stop-motion puppets, tactile realism',
+      styleDna:'Laika stop-motion style — tactile puppets with visible seams and fabric, practical sets, dramatic lighting, gothic whimsy, hand-crafted textures, subtle stop-motion imperfection, dark fairy-tale atmosphere',
+      videoHint:'Slow tactile puppet movement, subtle frame-stepping charm, dramatic light',
+      desc:'Marionnettes tactiles, coutures visibles, ambiance conte gothique.' },
+    { id:'aardman', name:'Stop-motion Aardman',
+      medium:'claymation, plasticine, British humour',
+      styleDna:'Aardman claymation style — plasticine characters with visible fingerprints, hand-made sets, warm lighting, British wit, expressive eyebrows, tactile charm, wholesome comic energy',
+      videoHint:'Snappy clay animation, expressive eyebrows, warm handmade charm',
+      desc:'Pâte à modeler avec empreintes de doigts, humour britannique chaleureux.' },
+    { id:'disney_2d', name:'Animation 2D Disney classique',
+      medium:'traditional 2D animation, painted cels, golden age',
+      styleDna:'Classic Disney 2D animation style — hand-drawn cels, painted backgrounds, expressive character animation, musical staging, warm golden lighting, romantic framing, timeless fairy-tale beauty',
+      videoHint:'Elegant musical staging, expressive 2D animation, warm golden light',
+      desc:'Celluloïds peints à la main, cadrages lyriques, beauté intemporelle.' },
+    { id:'ligne_claire', name:'Ligne claire (Tintin, Moebius)',
+      medium:'ligne claire bande dessinée, uniform line weight, flat colour',
+      styleDna:'Ligne claire Franco-Belgian comic style — clean uniform line weight, flat colour, precise realistic detail, Moebius and Hergé influence, retro-futurism, architectural backgrounds, serene European comic aesthetic',
+      videoHint:'Steady pan across architectural background, serene comic-world pacing',
+      desc:'Trait uniforme, aplat de couleur, Moebius/Hergé, élégance européenne.' },
+    { id:'voxel', name:'Low-poly / Voxel',
+      medium:'low-poly 3D or voxel, geometric faceting',
+      styleDna:'Low-poly or voxel 3D style — geometric faceted shapes, visible polygons or voxel cubes, retro-game-inspired, flat shading, stylized environments, nostalgic digital aesthetic',
+      videoHint:'Blocky retro camera, isometric drift, nostalgic digital feel',
+      desc:'Géométries facettées, cubes visibles, esthétique rétro-numérique.' },
+    { id:'clay_model', name:'Pâte à modeler / Argile',
+      medium:'clay modelling, soft rounded forms',
+      styleDna:'Clay modelling style — soft rounded forms, visible thumbprints, matte surface, pastel or earthy colour, tactile handmade feel, playful proportions, soft studio lighting',
+      videoHint:'Soft gentle rotation, tactile clay surface, warm studio light',
+      desc:'Formes douces, empreintes tactiles, matité artisanale.' }
+  ]},
+  { group: '🎨 Mixtes / Expérimentaux (10 styles)', items: [
+    { id:'spider_verse', name:'Mix manga + cinéma (Spider-Verse)',
+      medium:'hybrid 2D/3D, comic on screen, halftone, chromatic aberration',
+      styleDna:'Spider-Verse mixed style — comic-book onomatopoeia visible, halftone dots, chromatic aberration, hand-drawn lines over 3D, dynamic pose exaggeration, saturated comics colour, energy lines, pop-art hybrid, constantly inventive',
+      videoHint:'Kinetic swing, comic-panel cuts, chromatic drift, explosive energy',
+      desc:'Comics à l’écran : trames, aberrations, énergie pop-art perpétuelle.' },
+    { id:'paper_collage', name:'Collage / papier découpé (Terry Gilliam)',
+      medium:'cut-out paper collage animation, Victorian engravings',
+      styleDna:'Terry Gilliam paper cut-out collage style — Victorian engravings cut and animated, surreal juxtaposition, hand-drawn borders, absurdist humour, aged paper texture, theatrical flat composition',
+      videoHint:'Cut-out paper movement, surreal absurd transitions, handmade collage feel',
+      desc:'Gravures victoriennes découpées, absurdité surréaliste, papier vieilli.' },
+    { id:'neon_retro', name:'Néon rétro-futuriste (Blade Runner + Ghibli)',
+      medium:'neon-lit hybrid, anime-cyberpunk, rain-slicked',
+      styleDna:'Neon retro-futurist hybrid — cyberpunk cityscape with Ghibli warmth, neon kanji signs, rain-slicked streets, holograms, saturated magenta-cyan-yellow, atmospheric fog, flying vehicles, monumental architecture, melancholic beauty',
+      videoHint:'Slow drone over neon city, rain glitter, holographic movement',
+      desc:'Cyberpunk chaleureux, néons, pluie, hologrammes, beauté mélancolique.' },
+    { id:'painterly', name:'Pictural (Van Gogh, Monet)',
+      medium:'oil painting, impressionist brushwork, impasto',
+      styleDna:'Painterly impressionist style — visible oil brush strokes, impasto texture, swirling skies, expressive colour, Monet and Van Gogh influence, canvas grain, emotional rendering over realism',
+      videoHint:'Painterly brush drift, slow impressionist pan, emotional colour',
+      desc:'Coups de pinceau visibles, ciels tourbillonnants, émotion picturale.' },
+    { id:'surreal', name:'Surréaliste (Dalí, Magritte)',
+      medium:'surrealist painting or photo, dreamlike impossible scenes',
+      styleDna:'Surrealist style — dreamlike impossible scenes, Dalí and Magritte influence, floating objects, bowler hats, melting forms, pristine rendering of impossible subjects, quiet uncanny, precise yet absurd',
+      videoHint:'Slow uncanny reveal, floating object drift, impossible logic',
+      desc:'Scènes impossibles nettes, objets flottants, étrangeté calme.' },
+    { id:'art_nouveau', name:'Art nouveau (Mucha, Gaudí)',
+      medium:'art nouveau illustration, botanical ornament, organic architecture',
+      styleDna:'Art nouveau style — Alphonse Mucha flowing line work, botanical ornament, Gaudí organic architecture, stained glass colour, decorative borders, undulating curves, ornate and harmonious, warm jewel tones',
+      videoHint:'Ornamental slow pan, botanical curve drift, jewel-tone glow',
+      desc:'Courbes Mucha, ornementation botanique, architecture Gaudí, joyaux chauds.' },
+    { id:'ukiyoe', name:'Estampe japonaise (Hokusai)',
+      medium:'ukiyo-e woodblock print, flat colour, washi texture',
+      styleDna:'Ukiyo-e woodblock print style — flat areas of colour, bold outlines, stylized waves and clouds, Hokusai and Hiroshige influence, washi paper texture, traditional Japanese composition, dramatic nature motifs',
+      videoHint:'Stylized wave movement, washi paper drift, bold flat colour',
+      desc:'Estampe japonaise, vagues stylisées, papier washi, aplats francs.' },
+    { id:'dystopian_bw', name:'Dystopie N&B (Sin City)',
+      medium:'high-contrast black and white, selective colour accent',
+      styleDna:'Sin City style — extreme high-contrast black and white, selective colour accent (red, yellow), noir shadows, harsh graphic lighting, comic-book splash feel, stark silhouettes, visceral and stylized',
+      videoHint:'Graphic noir push-in, selective colour bloom, harsh shadows',
+      desc:'Noir extrême, silhouettes graphiques, un seul accent de couleur.' },
+    { id:'quay_puppets', name:'Marionnettes grotesques (Brothers Quay)',
+      medium:'stop-motion puppets, unsettling Victorian craft',
+      styleDna:'Brothers Quay puppet style — intricate Victorian puppets, unsettling beauty, dusty textures, theatrical staging, sepia or desaturated tones, dreamlike decay, meticulous craft, uncanny atmosphere',
+      videoHint:'Slow uncanny puppet movement, dusty texture drift, unsettling stillness',
+      desc:'Marionnettes victoriennes délicates, beauté inquiétante, poussière.' },
+    { id:'mix_total', name:'🎲 Mix total — mélange imprévisible',
+      medium:'surprise hybrid — combine director + manga/animation in same shot',
+      styleDna:'Unexpected mix of styles — combine a cinematic director with an anime or animation style in the same shot (e.g. Wes Anderson framing with Ghibli backgrounds, or Kubrick symmetry in a manga line-drawn world), constantly surprising, always coherent world, no boring frame, inventiveness on every single shot',
+      videoHint:'Inventive camera, mixed-media transitions, constantly surprising',
+      desc:'Fusion imprévisible de plusieurs univers. Chaque plan surprend. Cohérence totale garantie.' }
+  ]}
+];
+
+// ═══════════════════════════════════════════════════════════════
+// EXEMPLES FEW-SHOT
+// ═══════════════════════════════════════════════════════════════
+const EXAMPLE_AVATAR = {
+  face_dna: "A woman in her early thirties, pale skin scattered with freckles across the bridge of the nose, oval face with high cheekbones, softly squared jaw, small rounded chin. Dark brown eyebrows, naturally full, slight arch. Deep-set hazel eyes with green flecks, thick dark lashes, subtle shadow under the eyes. Straight narrow nose with a small rounded tip. Full dusty-rose lips, often pressed in a pensive expression. Dark brown wavy hair cut just above the shoulders, parted slightly off-centre, tucked behind the right ear. A small mole on the left cheekbone. Typical expression: watchful, mildly sad, intelligent.",
+  body_dna: "Tall, slender build, narrow shoulders, upright and slightly guarded posture, long delicate hands with short unpainted nails.",
+  typical_outfit: "Charcoal wool trench coat over a cream silk shirt, dark leather gloves, low-heeled black boots."
+};
+
+const EXAMPLE_STORY = {
+  title: "Les Nuits de Montparnasse",
+  logline: "Une détective solitaire enquête sur la disparition d'un pianiste de jazz et découvre qu'elle est elle-même au coeur du mystère.",
+  characters: [
+    { name:"Élise", role:"protagoniste", description:"A 34-year-old female private detective, guarded, sharp-witted, haunted by a past case; she wants the truth even at her own cost." },
+    { name:"Marc", role:"secondaire principal", description:"A jazz pianist in his fifties, elegant and tired, the missing man's mentor; he knows more than he says." },
+    { name:"Nadia", role:"secondaire", description:"The owner of a smoky jazz cellar, in her forties, alluring and secretive." },
+    { name:"Commissaire Blanc", role:"secondaire", description:"An older police commissioner, cynical but not corrupt; he resents Élise's interference." }
+  ],
+  locations: [
+    "A smoky jazz cellar on rue de la Huchette, low ceilings, red velvet booths",
+    "The rain-soaked quays of the Seine at three in the morning",
+    "A cramped detective office with yellowed case files stacked on the floor",
+    "A grand Haussmann apartment emptied of furniture, tall windows and bare parquet",
+    "A rooftop overlooking Montparnasse cemetery at dawn"
+  ],
+  arc: [
+    { beat:"Ouverture", summary:"Élise accepte l'affaire et explore les lieux du milieu jazz.", startState:"A calm Parisian night, Élise alone in her office", endState:"First real clue — a torn photograph", keyEvents:["Élise receives the case file","She visits the empty jazz club after closing","She meets Nadia, the bar owner","A stranger follows her home through the rain"] },
+    { beat:"Développement", summary:"Élise plonge dans le milieu du jazz, les rencontres se multiplient, les mensonges aussi.", startState:"Élise questions Marc", endState:"She realises the disappearance is a set-up", keyEvents:["A tense interview with Marc in a rehearsal room","A late-night jam session under a single lamp","Élise finds a second torn photograph in a piano bench","A veiled warning from Commissioner Blanc"] },
+    { beat:"Complication", summary:"Élise découvre que l'affaire la concerne personnellement.", startState:"Élise suspects Nadia", endState:"She is attacked in her own office", keyEvents:["A confrontation in the cellar after closing","A chase through the rain along the Seine","A broken window and a missing case file","Élise recognises a face from a ten-year-old case"] },
+    { beat:"Climax", summary:"La confrontation finale sur les toits.", startState:"Élise alone, wounded, at dawn", endState:"The truth laid bare on the rooftops", keyEvents:["A rooftop confrontation above Montparnasse","Marc's confession in the cold air","A single gunshot in the fog","The missing pianist found alive, broken"] },
+    { beat:"Résolution", summary:"Élise referme l'affaire. Paris reprend son souffle.", startState:"Dawn after the climax, everything quiet", endState:"Élise at peace, alone but whole", keyEvents:["Élise closes the case file on her desk","A final silent exchange with Nadia","The empty jazz club at sunrise","Élise walks into the morning light along the Seine"] }
+  ]
+};
+
+const EXAMPLE_SHOT_DECOR = {
+  label:"Rue déserte", type:"decor",
+  beat:"Élise rentre seule, la ville est vide et humide. Le doute s'installe.",
+  imagePromptEn:"Empty rain-soaked cobblestone street in 1962 Paris at 3am, wet reflections of a single flickering streetlamp, closed shutters, one abandoned bicycle leaning on a wall, thin fog crawling along the ground, 35mm Kodak Portra 400 pushed to 800, anamorphic lens, fine grain, deep shadows, melancholic noir mood, no people, architectural precision",
+  imagePromptFr:"Une rue vide et mouillée à 3h du matin. Aucun personnage : la ville seule raconte le vide intérieur d'Élise.",
+  videoPromptEn:"Static wide shot of an empty rain-soaked cobblestone street at 3am, wet reflections on the ground, thin fog drifting slowly, one flickering streetlamp, no people, cinematic 35mm film look, shallow depth of field, melancholic noir night mood.",
+  videoPromptFr:"Plan large fixe d'une rue vide et humide. Le brouillard dérive lentement, un lampadaire grésille.",
+  speaker:"VOIX OFF",
+  dialogue:"« Trois heures du matin. La ville dort, mais moi je ne dors plus depuis dix ans. »",
+  soundFx:"pluie fine sur les pavés, grésillement du lampadaire, pas lointains"
+};
+
+const EXAMPLE_SHOT_DIALOGUE = {
+  label:"Face à Marc", type:"groupe",
+  beat:"Élise confronte Marc dans la salle de répétition. Elle sait qu'il ment.",
+  imagePromptEn:"Interior rehearsal room in 1962 Paris, warm tungsten light from a single ceiling bulb, Élise (34-year-old woman with pale freckled skin, dark brown wavy shoulder-length hair, hazel eyes, charcoal wool trench coat) stands facing Marc (a 55-year-old pianist in a rumpled grey suit, thinning dark hair, tired eyes), an upright piano between them, sheet music scattered on the floor, 35mm Kodak Portra 400, anamorphic, shallow depth of field, tense staging",
+  imagePromptFr:"Élise confronte Marc dans une salle de répétition. La lumière unique et la distance entre eux traduisent la méfiance.",
+  videoPromptEn:"Medium two-shot, slow dolly-in toward the two characters, warm practical tungsten, shadows on the walls, subtle handheld drift, tense atmosphere.",
+  videoPromptFr:"Plan moyen qui se rapproche lentement des deux personnages.",
+  speaker:"Élise",
+  dialogue:"« Tu savais qu'il ne rentrerait pas, Marc. Alors arrête de me mentir. »",
+  soundFx:"silence lourd, respiration, craquement du piano"
+};
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const state = {
+  apiKeys: [],
+  charA: null, charAName: '', charADna: null,
+  charB: null, charBName: '', charBDna: null,
+  scenario: '',
+  userPrompt: '',
+  styleId: 'wes_anderson',
+  story: null,
+  plan: [],
+  viewerIndex: 0,
+  isRunning: false,
+  uiLocked: false,
+  stopRequested: false,
+  completed: 0,
+  total: 0,
+  startTime: 0,
+  keyIndex: 0,
+  humanLog: [],
+  debugLog: []
+};
+
+// ═══════════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nowTime = () => new Date().toLocaleTimeString('fr-FR', { hour12: false });
+const copyToClipboard = (text, okMsg, errMsg) => {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.left = '-9999px';
+  document.body.appendChild(ta); ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  toast(ok ? (okMsg || 'Copié') : (errMsg || 'Copie impossible'), ok ? 'success' : 'error', 1500);
+  return ok;
+};
+
+function human(msg) {
+  state.humanLog.push({ t: nowTime(), m: msg });
+  if (state.humanLog.length > 80) state.humanLog.shift();
+  const el = $('humanLatest'); if (el) el.textContent = msg;
+  renderHuman();
+}
+function renderHuman() {
+  const el = $('humanLog'); if (!el) return;
+  el.innerHTML = state.humanLog.slice(-30).map(e => '<div><span class="t">' + e.t + '</span> <span class="m">' + esc(e.m) + '</span></div>').join('');
+  el.scrollTop = el.scrollHeight;
+}
+function debug(msg, level = 'info') {
+  state.debugLog.push({ t: nowTime(), m: msg, c: level });
+  if (state.debugLog.length > DEBUG_MAX) state.debugLog.shift();
+  renderDebug();
+}
+function renderDebug() {
+  const el = $('debugLog'); if (!el) return;
+  el.innerHTML = state.debugLog.slice(-200).map(e => '<div><span class="t">' + e.t + '</span> <span class="' + e.c + '">' + esc(e.m) + '</span></div>').join('');
+  el.scrollTop = el.scrollHeight;
+}
+function toast(msg, type = 'success', dur = 2500) {
+  const t = $('toast');
+  t.className = 'toast ' + type + ' visible';
+  $('toastText').textContent = msg;
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => { t.className = 'toast ' + type; }, dur);
+}
+function setStatus(txt) {
+  const b = $('statusBar');
+  if (txt) { b.classList.add('visible'); $('statusText').textContent = txt; }
+  else b.classList.remove('visible');
+}
+function setPhase(phase, detail, eta) {
+  const order = ['avatar', 'story', 'shots', 'ready'];
+  const idx = order.indexOf(phase);
+  document.querySelectorAll('.step').forEach(el => {
+    const i = order.indexOf(el.dataset.p);
+    el.className = 'step' + (i < idx ? ' done' : i === idx ? ' active' : '');
+  });
+  if (detail !== undefined) $('phaseDetail').textContent = detail || '';
+  if (eta !== undefined) $('phaseEta').textContent = eta || '';
+}
+function fmtEta(s) { if (s < 0 || !isFinite(s)) return ''; return s < 60 ? Math.round(s) + 's' : Math.floor(s / 60) + 'm ' + Math.round(s % 60) + 's'; }
+function sanitize(t) { return String(t == null ? '' : t).replace(/[\u2018\u2019\u201B\u2032\u02BC]/g, "'").replace(/[\u201C\u201D\u201F\u2033]/g, '"').replace(/\u2013|\u2014/g, '-').replace(/\u2026/g, '...').replace(/[\u200B-\u200D\uFEFF]/g, '').replace(/\u00A0|\u202F/g, ' '); }
+function trunc(t, n) { if (!t) return ''; const s = String(t).replace(/\s+/g, ' ').trim(); return s.length <= n ? s : s.slice(0, n - 1) + '…'; }
+
+function looksLikePlaceholder(s) {
+  if (!s) return true;
+  const t = String(s).toLowerCase().trim();
+  if (t.length < 20) return false;
+  const markers = ['extremely detailed english','forensic portrait','english brief (age','english short state','english event 1','french film title (short','french one-sentence logline','protagonist first name (french)','secondary 1 (secondaire)','english location 1','english inferred setting, era, activity','english paragraph (6-8 sentences','english 1-2 sentences of what happens','english short state of the world'];
+  for (const m of markers) if (t.includes(m)) return true;
+  return false;
+}
+
+function setUILocked(locked) {
+  state.uiLocked = locked;
+  document.body.classList.toggle('locked', locked);
+  const ids = ['keysInput','validateBtn','clearBtn','styleSelect','scenarioInput','promptInput','charAName','charBName','charAInput','charBInput','charARemoveBtn','charBRemoveBtn'];
+  ids.forEach(id => { const el = $(id); if (el) el.disabled = locked; });
+  updateGenBtn();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STOCKAGE
+// ═══════════════════════════════════════════════════════════════
+const _mem = {};
+let _lsOk = false, _ssOk = false;
+try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); _lsOk = true; } catch (e) {}
+try { sessionStorage.setItem('__t','1'); sessionStorage.removeItem('__t'); _ssOk = true; } catch (e) {}
+const STORAGE_OK = _lsOk || _ssOk;
+function storageGet(k) {
+  if (_lsOk) { try { const v = localStorage.getItem(k); if (v !== null) return v; } catch (e) {} }
+  if (_ssOk) { try { const v = sessionStorage.getItem(k); if (v !== null) return v; } catch (e) {} }
+  return Object.prototype.hasOwnProperty.call(_mem, k) ? _mem[k] : null;
+}
+function storageSet(k, v) {
+  _mem[k] = String(v); let ok = false;
+  if (_lsOk) { try { localStorage.setItem(k, v); ok = true; } catch (e) {} }
+  if (_ssOk) { try { sessionStorage.setItem(k, v); ok = true; } catch (e) {} }
+  return ok;
+}
+function storageDel(k) {
+  delete _mem[k];
+  if (_lsOk) { try { localStorage.removeItem(k); } catch (e) {} }
+  if (_ssOk) { try { sessionStorage.removeItem(k); } catch (e) {} }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CLÉS API
+// ═══════════════════════════════════════════════════════════════
+function isValidKeyFormat(k) { return typeof k === 'string' && k.startsWith('sk-') && k.length >= 15 && k.length <= 200; }
+async function quickPing(key) {
+  try {
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(API_BASE + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: MODEL_TEXT, messages: [{ role: 'user', content: 'ok' }], max_tokens: 1 }),
+      signal: controller.signal
+    });
+    clearTimeout(tid);
+    return res.status !== 401 && res.status !== 403;
+  } catch (e) { return null; }
+}
+async function validateAndSaveKeys() {
+  if (state.uiLocked) return;
+  const raw = $('keysInput').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  if (raw.length === 0) { toast('Aucune clé à valider', 'error'); return; }
+  setUILocked(true);
+  $('validateBtn').textContent = '⏳ Validation…';
+  human('🔐 Validation de ' + raw.length + ' clé(s)…');
+  const valid = [];
+  for (let i = 0; i < raw.length; i++) {
+    const k = raw[i];
+    if (!isValidKeyFormat(k)) { debug('Clé ' + (i + 1) + ' : format invalide', 'err'); human('❌ Clé ' + (i + 1) + ' : format invalide'); continue; }
+    const ping = await quickPing(k);
+    if (ping === false) { debug('Clé ' + (i + 1) + ' : refusée (401/403)', 'err'); human('❌ Clé ' + (i + 1) + ' : refusée'); continue; }
+    valid.push(k);
+    debug('Clé ' + (i + 1) + ' : OK' + (ping === null ? ' (offline, conservée)' : ''), 'ok');
+    human('✅ Clé ' + (i + 1) + ' valide');
+  }
+  state.apiKeys = valid;
+  try { storageSet(KEYS_STORAGE, JSON.stringify(valid)); } catch (e) {}
+  const st = $('keyStatus');
+  if (valid.length > 0) { st.className = 'status-line ok'; $('keyStatusText').textContent = valid.length + ' clé(s) enregistrée(s) · rotation auto'; }
+  else { st.className = 'status-line err'; $('keyStatusText').textContent = 'Aucune clé valide'; }
+  $('validateBtn').textContent = '🔐 Valider et enregistrer';
+  updateKeyBadge();
+  setUILocked(false);
+  toast(valid.length + ' clé(s) enregistrée(s)', valid.length > 0 ? 'success' : 'error', 3500);
+}
+function getKey() {
+  if (state.apiKeys.length === 0) return '';
+  const k = state.apiKeys[state.keyIndex % state.apiKeys.length];
+  state.keyIndex++;
+  return k;
+}
+function updateKeyBadge() {
+  $('keyBadge').textContent = state.apiKeys.length + ' validée' + (state.apiKeys.length > 1 ? 's' : '');
+  updateGenBtn();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════════════════════
+async function apiChat(system, user, label, maxTokens, temp) {
+  const key = getKey();
+  if (!key) throw new Error('Aucune clé API');
+  const body = {
+    model: MODEL_TEXT,
+    messages: [
+      { role: 'system', content: sanitize(system) },
+      { role: 'user', content: sanitize(user) }
+    ],
+    temperature: temp !== undefined ? temp : 0.7,
+    max_tokens: maxTokens || 8000
+  };
+  const res = await fetch(API_BASE + '/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  debug('CHAT ' + label + ' HTTP ' + res.status, res.ok ? 'ok' : 'err');
+  if (!res.ok) { const t = await res.text(); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 120)); }
+  const d = await res.json();
+  const ch = d.choices && d.choices[0];
+  return (ch && ch.message && (ch.message.content || ch.message.reasoning_content)) || null;
+}
+async function apiVision(system, user, img, label, maxTokens, temp) {
+  const key = getKey();
+  if (!key) throw new Error('Aucune clé API');
+  const body = {
+    model: MODEL_TEXT,
+    messages: [
+      { role: 'system', content: sanitize(system) },
+      { role: 'user', content: [
+        { type: 'text', text: sanitize(user) },
+        { type: 'image_url', image_url: { url: img } }
+      ] }
+    ],
+    temperature: temp !== undefined ? temp : 0.35,
+    max_tokens: maxTokens || 2500
+  };
+  const res = await fetch(API_BASE + '/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  debug('VISION ' + label + ' HTTP ' + res.status, res.ok ? 'ok' : 'err');
+  if (!res.ok) { const t = await res.text(); throw new Error('HTTP ' + res.status + ' ' + t.slice(0, 120)); }
+  const d = await res.json();
+  const ch = d.choices && d.choices[0];
+  return (ch && ch.message && (ch.message.content || ch.message.reasoning_content)) || null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// JSON ROBUSTE
+// ═══════════════════════════════════════════════════════════════
+function repairJson(text) {
+  if (!text) return null;
+  let c = String(text).trim();
+  const fm = c.match(/```(?:json)?\s*([\s\S]*?)```/);
+  if (fm) c = fm[1].trim();
+  const fb = c.indexOf('{');
+  if (fb < 0) return null;
+  c = c.slice(fb);
+  const lb = c.lastIndexOf('}');
+  if (lb > 0) c = c.slice(0, lb + 1);
+  let out = '', inS = false, esc2 = false;
+  for (let i = 0; i < c.length; i++) {
+    const ch = c[i];
+    if (esc2) { if ('"\\/bfnrtu'.includes(ch)) { out += '\\' + ch; } else out += ch; esc2 = false; continue; }
+    if (ch === '\\') { esc2 = true; continue; }
+    if (ch === '"') { inS = !inS; out += ch; continue; }
+    if (inS) {
+      if (ch === '\n') out += '\\n';
+      else if (ch === '\r') out += '\\r';
+      else if (ch === '\t') out += '\\t';
+      else if (ch.charCodeAt(0) < 32) out += '\\u' + ch.charCodeAt(0).toString(16).padStart(4, '0');
+      else out += ch;
+      continue;
+    }
+    out += ch;
+  }
+  if (esc2) out += '\\';
+  if (inS) out += '"';
+  out = out.replace(/,\s*([}\]])/g, '$1');
+  return out;
+}
+function extractJson(text) {
+  const r = repairJson(text);
+  if (!r) return null;
+  try { return JSON.parse(r); } catch (e1) {
+    try {
+      let ob = 0, ok = 0, inS = false, es = false;
+      for (let i = 0; i < r.length; i++) {
+        const ch = r[i];
+        if (es) { es = false; continue; }
+        if (ch === '\\') { es = true; continue; }
+        if (ch === '"') { inS = !inS; continue; }
+        if (inS) continue;
+        if (ch === '{') ob++; else if (ch === '}') ob--;
+        else if (ch === '[') ok++; else if (ch === ']') ok--;
+      }
+      let b = r;
+      if (inS) b += '"';
+      while (ok-- > 0) b += ']';
+      while (ob-- > 0) b += '}';
+      return JSON.parse(b);
+    } catch (e2) { debug('PARSE : ' + e2.message, 'warn'); return null; }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SYSTÈME
+// ═══════════════════════════════════════════════════════════════
+const SYS_ART = [
+  'You are a world-class film director, screenwriter and cinematographer.',
+  'You prepare a 100-shot cinematic storyboard for AI video generation (Google Flow / Veo).',
+  'Each shot is the FIRST FRAME of a shot, and each shot carries ONE French spoken line (character dialogue OR voice-over).',
+  '',
+  'CRITICAL JSON RULE: Fill every key with REAL, SPECIFIC content. NEVER copy field descriptions, the schema, or the example content. Examples show FORMAT only.',
+  '',
+  'YOUR PRIORITIES:',
+  '1) NARRATIVE PRECISION — every shot tightly tied to the specific story beat. Decor, props, weather, time of day, lighting, action, emotion serve the exact moment of the plot.',
+  '2) STRIKING FRAMES — every frame must be EYE-CATCHING, STRONG, MEMORABLE. NO boring, neutral, or generic shots.',
+  '3) DIALOGUE COHERENCE — the French lines, read in order, tell the story. Each line attributed to a named character OR marked VOIX OFF. Never generic filler.',
+  '4) VISUAL VARIETY — mix decor-only, protagonist-alone, other-characters-only, group shots and detail shots. Never two similar shots in a row.',
+  '5) CHARACTER CONSISTENCY — the two main characters (A and B) must be described forensically and repeated VERBATIM in every shot where they appear.',
+  '6) FRENCH AUDIO — dialogue written in French only. No music. Only French dialogue and natural sound effects. Dialogue must be embedded in the English video prompt as: Spoken in French by [speaker]: « French line » or Voice-over in French: « French line ».',
+  '',
+  'Output ONLY valid JSON. No markdown. No code fences. Straight apostrophes inside strings.'
+].join(' ');
+
+// ═══════════════════════════════════════════════════════════════
+// ANALYSE D'UN AVATAR (photo)
+// ═══════════════════════════════════════════════════════════════
+async function analyzeAvatar(dataUrl, label, userName) {
+  const sys = 'You are a forensic portrait analyst. You describe a face with enough precision that a text-to-image AI can recreate the exact same face without ever seeing the image. Output ONLY valid JSON.';
+  const usr = [
+    'Analyse the photo below. Output ONLY this JSON:',
+    '{',
+    '  "face_dna": "EXTREMELY DETAILED ENGLISH — 90-140 words: gender, apparent age, ethnicity, skin tone, face shape, cheekbones, jaw, chin, forehead, eyebrows, eyes, nose, mouth, lips, ears, hair colour/texture/length, hairstyle, hairline, facial hair, distinctive features, typical expression.",',
+    '  "body_dna": "ENGLISH — 30-50 words: height impression, build, shoulders, posture, hands.",',
+    '  "typical_outfit": "ENGLISH — 25-45 words: the base outfit visible in the photo (colour, fabric, style)."',
+    '}',
+    '',
+    userName ? ('The character\'s name is ' + userName + '.') : '',
+    'Do NOT copy this schema into the output. Fill it with REAL observations of the actual photo.'
+  ].filter(Boolean).join('\n');
+  const raw = await apiVision(sys, usr, dataUrl, 'Avatar ' + label, 1500, 0.3);
+  const p = extractJson(raw);
+  if (!p) throw new Error('Analyse avatar ' + label + ' impossible');
+  return {
+    face_dna: String(p.face_dna || '').trim(),
+    body_dna: String(p.body_dna || '').trim(),
+    typical_outfit: String(p.typical_outfit || '').trim()
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ANALYSE DU SCÉNARIO → histoire
+// ═══════════════════════════════════════════════════════════════
+async function analyzeStory(scenario, style, avatarA, avatarB, userPrompt) {
+  const exampleJson = JSON.stringify(EXAMPLE_STORY, null, 2);
+  const prompt = [
+    '════════ SCENARIO ════════',
+    scenario,
+    '══════════════════════════',
+    '',
+    '════════ STYLE DU FILM ════════',
+    'STYLE NAME: ' + style.name,
+    'MEDIUM: ' + style.medium,
+    'STYLE DNA: ' + style.styleDna,
+    '════════════════════════════════',
+    '',
+    userPrompt ? ('════════ NOTES ARTISTIQUES ════════\n' + userPrompt + '\n════════════════════════════════════') : '',
+    '',
+    '════════ PERSONNAGE A (protagoniste) ════════',
+    avatarA ? ('FACE DNA: ' + avatarA.face_dna + '\nBODY: ' + avatarA.body_dna + '\nOUTFIT: ' + avatarA.typical_outfit) : '(pas de photo — invente un protagoniste)',
+    state.charAName ? ('NOM: ' + state.charAName) : '',
+    '════════════════════════════════════════════',
+    '',
+    '════════ PERSONNAGE B (second rôle) ════════',
+    avatarB ? ('FACE DNA: ' + avatarB.face_dna + '\nBODY: ' + avatarB.body_dna + '\nOUTFIT: ' + avatarB.typical_outfit) : '(pas de photo — pas obligatoire)',
+    state.charBName ? ('NOM: ' + state.charBName) : '',
+    '════════════════════════════════════════════',
+    '',
+    '═══ YOUR TASK ═══',
+    'Produce ONE JSON object describing the world and story of OUR film, in the selected STYLE, using the given protagonist(s).',
+    '',
+    '⚠ CRITICAL:',
+    '- The example below is for a DIFFERENT film (a 1962 Parisian noir).',
+    '- You must produce a JSON with the SAME KEYS but with DIFFERENT, REAL content for OUR film.',
+    '- NEVER copy any value from the example.',
+    '- The characters A and B, if given, MUST appear in the story with their REAL faces (do not change them).',
+    '- Invent 3 to 6 additional secondary characters with distinct looks and roles.',
+    '- Invent 5 to 7 striking locations that will feed the visual richness.',
+    '- The 5-act arc must be a coherent dramatic progression with 3-5 filmable key events per act.',
+    '',
+    '═══ CONCRETE EXAMPLE (FORMAT ONLY — do NOT copy) ═══',
+    exampleJson,
+    '═══════════════════════════════════════════════════════════════════',
+    '',
+    'NOW PRODUCE THE REAL JSON FOR OUR FILM. Output ONLY the JSON object.'
+  ].filter(Boolean).join('\n');
+  const raw = await apiChat(SYS_ART, prompt, 'Scénario', 4500, 0.75);
+  const p = extractJson(raw);
+  if (!p) throw new Error('Analyse scénario impossible');
+  return normalizeStory(p, avatarA, avatarB);
+}
+
+function normalizeStory(p, avatarA, avatarB) {
+  const clean = v => { const s = (v == null ? '' : String(v)).trim(); return looksLikePlaceholder(s) ? '' : s; };
+  const st = p.story || p;
+  const arcRaw = Array.isArray(st.arc) ? st.arc : [];
+  const arc = [];
+  for (let i = 0; i < 5; i++) {
+    const b = arcRaw[i] || {};
+    const defaultBeats = ['Ouverture','Développement','Complication','Climax','Résolution'];
+    arc.push({
+      beat: clean(b.beat) || defaultBeats[i],
+      summary: clean(b.summary).slice(0, 700),
+      startState: clean(b.startState).slice(0, 300),
+      endState: clean(b.endState).slice(0, 300),
+      keyEvents: Array.isArray(b.keyEvents) ? b.keyEvents.map(x => clean(x)).filter(Boolean).slice(0, 6) : []
+    });
+  }
+  const characters = Array.isArray(st.characters) ? st.characters.slice(0, 8).map((c, i) => ({
+    name: clean(c && c.name).slice(0, 40) || ((i === 0 ? 'A' : 'Perso ' + i)),
+    role: clean(c && c.role).slice(0, 40) || (i === 0 ? 'protagoniste' : 'secondaire'),
+    description: clean(c && c.description).slice(0, 400)
+  })).filter(c => c.description) : [];
+  const story = {
+    title: clean(st.title) || 'Sans titre',
+    logline: clean(st.logline),
+    characters: characters,
+    locations: Array.isArray(st.locations) ? st.locations.map(x => clean(x)).filter(Boolean).slice(0, 8) : [],
+    arc: arc
+  };
+  state.story = story;
+  state.charADna = avatarA || null;
+  state.charBDna = avatarB || null;
+  return story;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BLOCS DE PROMPT
+// ═══════════════════════════════════════════════════════════════
+function currentStyle() {
+  for (const g of STYLE_GROUPS) for (const it of g.items) if (it.id === state.styleId) return it;
+  return STYLE_GROUPS[0].items[0];
+}
+function styleDnaBlock() {
+  const s = currentStyle();
+  return [
+    '═══ VISUAL STYLE — FOLLOW EXACTLY ═══',
+    'STYLE: ' + s.name,
+    'MEDIUM: ' + s.medium,
+    'STYLE DNA: ' + s.styleDna,
+    '═══════════════════════════════════════'
+  ].join('\n');
+}
+function charBlockA() {
+  const a = state.charADna;
+  if (!a || !a.face_dna) return '';
+  const lines = ['═══ CHARACTER A — PROTAGONIST (SAME PERSON, EVERY TIME) ═══', 'FACE: ' + a.face_dna];
+  if (a.body_dna) lines.push('BODY: ' + a.body_dna);
+  if (a.typical_outfit) lines.push('BASE OUTFIT: ' + a.typical_outfit);
+  lines.push('═══════════════════════════════════════════════════════════');
+  return lines.join('\n');
+}
+function charBlockB() {
+  const b = state.charBDna;
+  if (!b || !b.face_dna) return '';
+  const lines = ['═══ CHARACTER B — SECOND ROLE (SAME PERSON, EVERY TIME) ═══', 'FACE: ' + b.face_dna];
+  if (b.body_dna) lines.push('BODY: ' + b.body_dna);
+  if (b.typical_outfit) lines.push('BASE OUTFIT: ' + b.typical_outfit);
+  lines.push('═══════════════════════════════════════════════════════════');
+  return lines.join('\n');
+}
+function hardLock() {
+  return [
+    '═══ ABSOLUTE RULES ═══',
+    '- Real photographic / pictural / animation medium consistent with the STYLE above.',
+    '- Vertical 9:16, cinematic framing, striking eye-catching composition.',
+    '- Every frame is STRONG, MEMORABLE, UNIQUE. No boring, neutral or generic shot.',
+    '- Rich, detailed decor and costumes that reinforce the plot and the mood.',
+    '- NO text, NO watermark, NO logo, NO caption inside the image.',
+    '- No music in the video. Only French dialogue and natural sound effects.'
+  ].join('\n');
+}
+function storyHeader() {
+  const s = state.story;
+  const lines = [
+    'FILM: ' + (s && s.title ? s.title : '(untitled)'),
+    'LOGLINE: ' + (s && s.logline ? s.logline : ''),
+    'STYLE: ' + currentStyle().name,
+    'LOCATIONS: ' + (s && s.locations ? s.locations.join(' | ') : '')
+  ];
+  if (s && s.characters && s.characters.length) {
+    lines.push('CAST:');
+    s.characters.forEach((c, i) => lines.push('  [' + (i === 0 ? 'CHARACTER A' : i === 1 ? 'CHARACTER B' : 'secondary') + '] ' + c.name + ' — ' + c.description));
+  }
+  return lines.filter(Boolean).join('\n');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GÉNÉRATION DES 5 CHUNKS DE 20 PLANS
+// ═══════════════════════════════════════════════════════════════
+async function genShotChunk(chunkIdx) {
+  const beat = state.story.arc[chunkIdx];
+  const startN = chunkIdx * SHOTS_PER_CHUNK + 1;
+  const endN = (chunkIdx + 1) * SHOTS_PER_CHUNK;
+  const exD = JSON.stringify(EXAMPLE_SHOT_DECOR, null, 2);
+  const exDial = JSON.stringify(EXAMPLE_SHOT_DIALOGUE, null, 2);
+  const castNames = state.story.characters.map(c => c.name).filter(Boolean).join(' | ');
+  const hasB = !!state.charBDna;
+
+  const usr = [
+    'You are the director writing the storyboard of a film. Each shot is the FIRST FRAME of a shot animated later by Google Flow (Veo). Every shot carries ONE French spoken line that advances the story.',
+    '',
+    '════════ STORY ════════',
+    storyHeader(),
+    '═══════════════════════',
+    '',
+    charBlockA(),
+    hasB ? charBlockB() : '',
+    '',
+    styleDnaBlock(),
+    '',
+    '════════ YOUR ACT ════════',
+    'ACT ' + (chunkIdx + 1) + ' of 5 — « ' + beat.beat + ' »',
+    'SUMMARY: ' + beat.summary,
+    'START STATE: ' + beat.startState,
+    'END STATE: ' + beat.endState,
+    'KEY EVENTS: ' + (beat.keyEvents.join(' → ') || '(none)'),
+    '═════════════════════════',
+    '',
+    'YOUR TASK — write EXACTLY ' + SHOTS_PER_CHUNK + ' shots, #' + startN + ' to #' + endN + ' of 100.',
+    '',
+    '═══ RULE A — STRONG EYE-CATCHING FRAMES ═══',
+    'Every frame must be STRIKING, MEMORABLE and reinforce the exact beat it covers. NO boring, generic, neutral shot. Rich decor, costumes, props, weather, light. If tense → shadows, rain, distance. If tender → warm light, intimacy. If tragic → emptiness, grey, fragments.',
+    '',
+    '═══ RULE B — VARIETY ═══',
+    'Use ALL these shot types proportionally over 20 shots:',
+    '   • "decor"  (3-5)  : empty location, NO people',
+    '   • "heros"  (5-7)  : CHARACTER A ALONE',
+    (hasB ? '   • "second" (2-4)  : CHARACTER B ALONE' : ''),
+    (hasB ? '   • "duo"    (3-5)  : CHARACTER A + CHARACTER B' : ''),
+    '   • "groupe" (2-4)  : CHARACTER A (and B) WITH 1-3 other characters',
+    '   • "autres" (2-3)  : OTHER CHARACTERS ONLY',
+    '   • "detail" (2-3)  : close-up on a PROP — no face',
+    'Never repeat the same composition two shots in a row.',
+    '',
+    '═══ RULE C — DIALOGUE COHERENCE ═══',
+    'Every shot carries ONE French spoken line. NEVER empty.',
+    '   • If a character speaks on screen → "speaker" = their cast name.',
+    '   • If no one speaks on screen → "speaker" = "VOIX OFF" and write a NARRATIVE voice-over line that advances the story (never descriptive filler).',
+    'The 20 lines of THIS act, read in order, must form a coherent mini-story: line #' + startN + ' opens the act from the START STATE; middle lines reference at least one KEY EVENT each; line #' + endN + ' closes the act at the END STATE.',
+    'Natural spoken French. Never translated English. Never filler.',
+    '',
+    '═══ RULE D — VIDEO PROMPT (EN) EMBEDS THE DIALOGUE ═══',
+    'Inside "videoPromptEn" the spoken line MUST appear as:',
+    '   Spoken in French by [speaker]: « exact French line »',
+    'or, for voice-over:',
+    '   Voice-over in French: « exact French line »',
+    'Always end videoPromptEn with: No music. Only French dialogue and natural sound effects. Duration 5 seconds. Vertical 9:16.',
+    '',
+    '═══ RULE E — FACE LOCK ═══',
+    'In every "heros", "duo", "groupe" shot, the respective face DNA must be repeated VERBATIM.',
+    '',
+    '═══ TWO EXAMPLES (format only — do NOT copy) ═══',
+    'Example 1 — decor with VOIX OFF:',
+    exD,
+    '',
+    'Example 2 — groupe with character dialogue:',
+    exDial,
+    '══════════════════════════════════════════════════════════════',
+    '',
+    'Cast names for "speaker": ' + (castNames || '(invent from story)'),
+    '',
+    'For EACH of the ' + SHOTS_PER_CHUNK + ' shots output an object with keys:',
+    '- "label"         : 2-4 French words',
+    '- "type"          : one of "decor"|"heros"|"second"|"duo"|"groupe"|"autres"|"detail"',
+    '- "beat"          : short French phrase of what happens',
+    '- "imagePromptEn" : ENGLISH image prompt (55-80 words) — striking, precise, tied to plot',
+    '- "imagePromptFr" : FRENCH 1-3 sentences explaining what the shot shows and why it matters',
+    '- "videoPromptEn" : ENGLISH Veo/Flow prompt (55-75 words) INCLUDING the exact spoken line (see RULE D). End with: "No music. Only French dialogue and natural sound effects. Duration 5 seconds. Vertical 9:16."',
+    '- "videoPromptFr" : FRENCH 1-2 sentences',
+    '- "speaker"       : FRENCH cast name OR "VOIX OFF". NEVER empty.',
+    '- "dialogue"      : FRENCH spoken line wrapped in « … ». NEVER empty.',
+    '- "soundFx"       : FRENCH short list of sound effects',
+    '',
+    'Return ONLY:',
+    '{"items":[{"label":"...","type":"...","beat":"...","imagePromptEn":"...","imagePromptFr":"...","videoPromptEn":"...","videoPromptFr":"...","speaker":"...","dialogue":"...","soundFx":"..."}]}',
+    'with EXACTLY ' + SHOTS_PER_CHUNK + ' items.',
+    'NEVER copy the examples.'
+  ].filter(Boolean).join('\n');
+
+  const raw = await apiChat(SYS_ART, usr, 'Acte ' + (chunkIdx + 1), 14000, 0.85);
+  const p = extractJson(raw);
+  const arr = (p && Array.isArray(p.items)) ? p.items : [];
+  const out = [];
+  const validTypes = ['decor','heros','second','duo','groupe','autres','detail'];
+  for (let i = 0; i < SHOTS_PER_CHUNK; i++) {
+    const it = arr[i] || {};
+    let type = validTypes.includes(it.type) ? it.type : 'heros';
+    if (!hasB && (type === 'second' || type === 'duo')) type = 'groupe';
+    const speaker = String(it.speaker || 'VOIX OFF').trim() || 'VOIX OFF';
+    let dialogue = String(it.dialogue || '').trim();
+    if (!dialogue) dialogue = '« ' + (beat.summary || 'L\'histoire continue.') + ' »';
+    if (!dialogue.includes('«')) dialogue = '« ' + dialogue + ' »';
+    out.push({
+      _n: startN + i,
+      type: type,
+      label: String(it.label || '').slice(0, 60) || ('Plan ' + (startN + i)),
+      beat: String(it.beat || '').slice(0, 220),
+      imagePromptEn: String(it.imagePromptEn || '').trim() || ('Cinematic photograph, act ' + beat.beat + ', style ' + currentStyle().name + '.'),
+      imagePromptFr: String(it.imagePromptFr || '').slice(0, 600),
+      videoPromptEn: String(it.videoPromptEn || '').trim(),
+      videoPromptFr: String(it.videoPromptFr || '').slice(0, 400),
+      speaker: speaker.slice(0, 60),
+      dialogue: dialogue.slice(0, 400),
+      soundFx: String(it.soundFx || '').slice(0, 220)
+    });
+  }
+  return out;
+}
+
+async function buildStoryboard() {
+  setPhase('shots', '🎬 Écriture des 100 plans…', '');
+  setStatus('Écriture des 100 plans…');
+  human('🎬 Écriture des 100 plans — 5 actes en parallèle…');
+
+  const nKeys = state.apiKeys.length;
+  const parallel = Math.max(1, Math.min(nKeys, SHOT_CHUNKS));
+  debug('Storyboard : ' + SHOT_CHUNKS + ' actes · parallélisme ' + parallel, 'api');
+
+  const queue = [0, 1, 2, 3, 4];
+  const results = new Array(SHOT_CHUNKS).fill(null);
+  let done = 0;
+
+  async function worker(slot) {
+    let first = true;
+    while (true) {
+      if (state.stopRequested) return;
+      const ci = queue.shift();
+      if (ci === undefined) return;
+      if (first) { first = false; if (slot > 0) await sleep(slot * 220); }
+      if (state.stopRequested) return;
+      try {
+        const items = await genShotChunk(ci);
+        results[ci] = items;
+        done++;
+        human('✍️ Acte ' + (ci + 1) + ' · ' + items.length + ' plans');
+        debug('Chunk ' + (ci + 1) + ' OK', 'ok');
+        setPhase('shots', '🎬 ' + done + ' / ' + SHOT_CHUNKS + ' actes écrits', '');
+      } catch (e) {
+        debug('Chunk ' + (ci + 1) + ' échec : ' + e.message, 'err');
+        const beat = state.story.arc[ci];
+        const items = [];
+        for (let i = 0; i < SHOTS_PER_CHUNK; i++) {
+          const n = ci * SHOTS_PER_CHUNK + 1 + i;
+          items.push({
+            _n: n, type: 'heros', label: 'Plan ' + n, beat: beat.beat,
+            imagePromptEn: 'Cinematic photograph, style ' + currentStyle().name + ', striking composition, film grain.',
+            imagePromptFr: 'Plan de repli.',
+            videoPromptEn: 'Cinematic slow camera move, natural lighting.',
+            videoPromptFr: 'Mouvement lent.',
+            speaker: 'VOIX OFF',
+            dialogue: '« ' + (beat.summary || 'L\'histoire continue.') + ' »',
+            soundFx: 'ambiance naturelle'
+          });
+        }
+        results[ci] = items;
+        done++;
+      }
+    }
+  }
+  await Promise.all(Array.from({ length: parallel }, (_, i) => worker(i)));
+
+  const flat = [];
+  for (let i = 0; i < SHOT_CHUNKS; i++) if (results[i]) flat.push(...results[i]);
+
+  const plan = flat.slice(0, SHOTS_TOTAL).map((it, i) => {
+    const needsA = ['heros','duo','groupe'].includes(it.type);
+    const needsB = it.type === 'duo' || it.type === 'second' || (it.type === 'groupe' && !!state.charBDna);
+    const parts = [it.imagePromptEn];
+    if (needsA) parts.push('', charBlockA());
+    if (needsB) parts.push('', charBlockB());
+    parts.push('', '---', styleDnaBlock(), '', hardLock());
+    return {
+      index: i + 1,
+      kind: it.type,
+      label: it.label,
+      beat: it.beat,
+      imagePromptEn: it.imagePromptEn,
+      imagePromptFr: it.imagePromptFr,
+      videoPromptEn: it.videoPromptEn,
+      videoPromptFr: it.videoPromptFr,
+      speaker: it.speaker,
+      dialogue: it.dialogue,
+      soundFx: it.soundFx,
+      fullImagePrompt: parts.filter(Boolean).join('\n')
+    };
+  });
+
+  while (plan.length < SHOTS_TOTAL) {
+    const n = plan.length + 1;
+    const beat = state.story.arc[Math.min(4, Math.floor((n - 1) / SHOTS_PER_CHUNK))];
+    const it = {
+      index: n, kind: 'heros', label: 'Plan ' + n, beat: beat.beat,
+      imagePromptEn: 'Cinematic photograph, style ' + currentStyle().name + ', striking composition.',
+      imagePromptFr: 'Plan de variation.',
+      videoPromptEn: 'Cinematic slow camera move.',
+      videoPromptFr: 'Mouvement lent.',
+      speaker: 'VOIX OFF',
+      dialogue: '« ' + (beat.summary || 'L\'histoire continue.') + ' »',
+      soundFx: 'ambiance naturelle'
+    };
+    it.fullImagePrompt = [it.imagePromptEn, '', charBlockA(), '', '---', styleDnaBlock(), '', hardLock()].filter(Boolean).join('\n');
+    plan.push(it);
+  }
+
+  state.plan = plan;
+  return plan;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ASSEMBLAGE DES PROMPTS COMPLETS
+// ═══════════════════════════════════════════════════════════════
+function buildVideoPromptFull(shot) {
+  const en = (shot.videoPromptEn || '').trim();
+  const speaker = shot.speaker || 'VOIX OFF';
+  const dlg = shot.dialogue || '';
+  let enFull = en || 'Cinematic slow camera move on this scene.';
+
+  if (dlg && !/spoken in french|voice-over in french/i.test(enFull)) {
+    if (speaker.toUpperCase() !== 'VOIX OFF') enFull += ' Spoken in French by ' + speaker + ': ' + dlg;
+    else enFull += ' Voice-over in French: ' + dlg;
+  }
+  if (!/no music/i.test(enFull)) enFull += ' No music. Only French dialogue and natural sound effects.';
+  if (!/9:16/.test(enFull)) enFull += ' Duration 5 seconds. Vertical 9:16.';
+  return enFull;
+}
+
+function buildFullShotText(shot) {
+  const parts = [];
+  parts.push('═══════════════════════════════════════════');
+  parts.push('PLAN #' + shot.index + '/100 · ' + shot.label + ' [' + shot.kind + ']');
+  parts.push('═══════════════════════════════════════════');
+  if (shot.beat) parts.push('📍 ' + shot.beat);
+  parts.push('');
+  parts.push('──────── 📸 PROMPT IMAGE (EN — pour l\'IA) ────────');
+  parts.push(shot.fullImagePrompt || shot.imagePromptEn);
+  parts.push('');
+  parts.push('──────── 🎬 PROMPT VIDÉO (EN — Google Flow / Veo) ────────');
+  parts.push(buildVideoPromptFull(shot));
+  parts.push('');
+  parts.push('──────── 💬 DIALOGUE FR ────────');
+  parts.push('🎙 ' + (shot.speaker || 'VOIX OFF') + ' : ' + (shot.dialogue || '(aucun)'));
+  parts.push('🔊 ' + (shot.soundFx || 'sons naturels — pas de musique'));
+  if (shot.videoPromptFr) parts.push('📖 ' + shot.videoPromptFr);
+  if (shot.imagePromptFr) parts.push('🇫🇷 ' + shot.imagePromptFr);
+  return parts.join('\n');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDU — panneau scénario + visionneuse
+// ═══════════════════════════════════════════════════════════════
+function renderScenarioPanel() {
+  const s = state.story;
+  const p = $('scenarioPanel');
+  if (!s) { p.classList.remove('visible'); return; }
+  $('scenarioPanelTitle').textContent = '🎬 ' + (s.title || 'Sans titre');
+  $('scenarioPanelLogline').textContent = s.logline || '';
+  let html = '';
+  if (s.characters.length) {
+    html += '<div class="scenario-section"><span class="k">Personnages</span><ul>';
+    s.characters.forEach((c, i) => {
+      const tag = i === 0 ? '⭐' : i === 1 ? '🌟' : '•';
+      html += '<li>' + tag + ' <strong>' + esc(c.name) + '</strong> <em>(' + esc(c.role) + ')</em> — ' + esc(c.description) + '</li>';
+    });
+    html += '</ul></div>';
+  }
+  if (s.locations.length) {
+    html += '<div class="scenario-section"><span class="k">Lieux</span><ul>';
+    s.locations.forEach(l => html += '<li>' + esc(l) + '</li>');
+    html += '</ul></div>';
+  }
+  if (s.arc.length) {
+    html += '<div class="scenario-section"><span class="k">Arc — 5 actes</span>';
+    s.arc.forEach((b, i) => {
+      html += '<div class="beat-card">';
+      html += '<div class="bt">Acte ' + (i + 1) + ' · ' + esc(b.beat || '') + '</div>';
+      if (b.summary) html += '<div class="bs">' + esc(b.summary) + '</div>';
+      if (b.keyEvents.length) html += '<div class="bk">• ' + b.keyEvents.map(esc).join('<br>• ') + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  $('scenarioPanelBody').innerHTML = html;
+  p.classList.add('visible');
+}
+
+const KIND_LABEL = { decor:'Décor', heros:'Protagoniste', second:'Second rôle', duo:'Duo', groupe:'Groupe', autres:'Autres', detail:'Détail' };
+
+function renderViewer() {
+  const v = $('viewer');
+  if (!state.plan.length) { v.classList.remove('visible'); return; }
+  v.classList.add('visible');
+  renderViewerCard();
+  renderViewerStrip();
+  updateViewerNav();
+}
+
+function renderViewerCard() {
+  const shot = state.plan[state.viewerIndex];
+  if (!shot) return;
+  const card = $('viewerCard');
+  const speaker = (shot.speaker || 'VOIX OFF').trim();
+  const isVO = speaker.toUpperCase() === 'VOIX OFF';
+  const vpFull = buildVideoPromptFull(shot);
+  const imageText = shot.fullImagePrompt || shot.imagePromptEn;
+  const kindLabel = KIND_LABEL[shot.kind] || shot.kind;
+
+  card.innerHTML =
+    '<div class="vc-head">' +
+      '<div>' +
+        '<div class="vc-idx">PLAN #' + shot.index + ' / 100</div>' +
+        '<div class="vc-label">' + esc(shot.label) + '</div>' +
+      '</div>' +
+      '<span class="vc-type-badge ' + esc(shot.kind) + '">' + esc(kindLabel) + '</span>' +
+    '</div>' +
+    (shot.beat ? '<div class="vc-beat">📍 ' + esc(shot.beat) + '</div>' : '') +
+    '<div class="pblock image" style="margin-top:1rem;">' +
+      '<span class="plabel">📸 PROMPT IMAGE — ENGLISH (à coller dans Google Flow / DALL·E / Midjourney)</span>' +
+      '<div class="ptext en">' + esc(imageText) + '</div>' +
+      '<div class="pblock fr-block" style="margin-top:.8rem;background:rgba(16,185,129,.03);">' +
+        '<span class="plabel">🇫🇷 Traduction du prompt image — pour comprendre ce qui se passe</span>' +
+        '<div class="ptext fr">' + esc(shot.imagePromptFr || '(pas de résumé français)') + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pblock video">' +
+      '<span class="plabel">🎬 PROMPT VIDÉO — ENGLISH (Google Flow / Veo) · dialogue français intégré</span>' +
+      '<div class="ptext en">' + esc(vpFull) + '</div>' +
+      '<div class="pblock fr-block" style="margin-top:.8rem;background:rgba(124,58,237,.03);">' +
+        '<span class="plabel">🇫🇷 Audio et action — pour comprendre ce qui se passe</span>' +
+        '<div class="ptext fr">' +
+          '<div><span class="speaker">' + (isVO ? '🎙 ' : '🗣 ') + esc(speaker) + ' :</span> <span class="dlg">' + esc(shot.dialogue || '(aucune ligne)') + '</span></div>' +
+          '<div class="sfx">🔊 ' + esc(shot.soundFx || 'sons naturels — pas de musique') + '</div>' +
+          (shot.videoPromptFr ? '<div style="margin-top:.35rem;">📖 ' + esc(shot.videoPromptFr) + '</div>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="vc-actions">' +
+      '<button class="btn btn-green" id="copyShotBtn">📋 Copier image + vidéo</button>' +
+      '<button class="btn btn-slate" id="copyVideoBtn" style="flex:0 0 auto;width:auto;">📋 Vidéo seule</button>' +
+      '<button class="btn btn-slate" id="copyImageBtn" style="flex:0 0 auto;width:auto;">📋 Image seule</button>' +
+    '</div>' +
+    '<div class="vc-copy-msg" id="copyMsg">Copié ✓</div>';
+
+  $('copyShotBtn').onclick = () => {
+    copyToClipboard(buildFullShotText(shot), 'Plan #' + shot.index + ' copié (image + vidéo)');
+    const m = $('copyMsg'); if (m) { m.classList.add('visible'); setTimeout(() => m.classList.remove('visible'), 1500); }
+  };
+  $('copyVideoBtn').onclick = () => copyToClipboard(buildVideoPromptFull(shot), 'Prompt vidéo copié');
+  $('copyImageBtn').onclick = () => copyToClipboard(shot.fullImagePrompt || shot.imagePromptEn, 'Prompt image copié');
+}
+
+function renderViewerStrip() {
+  const strip = $('viewerStrip');
+  let html = '';
+  state.plan.forEach((s, i) => {
+    const cls = 'strip-cell ' + s.kind + (i === state.viewerIndex ? ' active' : '');
+    html += '<button class="' + cls + '" data-i="' + i + '" title="Plan #' + s.index + ' · ' + esc(s.label) + '">' + s.index + '</button>';
+  });
+  strip.innerHTML = html;
+  strip.querySelectorAll('.strip-cell').forEach(b => b.onclick = () => goToShot(parseInt(b.dataset.i)));
+  // Scroll active into view
+  const active = strip.querySelector('.strip-cell.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function updateViewerNav() {
+  $('viewerCounter').textContent = (state.viewerIndex + 1) + ' / ' + state.plan.length;
+  $('viewerPrevBtn').disabled = state.viewerIndex <= 0;
+  $('viewerNextBtn').disabled = state.viewerIndex >= state.plan.length - 1;
+  $('viewerJump').max = state.plan.length;
+}
+
+function goToShot(i) {
+  if (i < 0) i = 0;
+  if (i >= state.plan.length) i = state.plan.length - 1;
+  state.viewerIndex = i;
+  renderViewerCard();
+  renderViewerStrip();
+  updateViewerNav();
+  const card = $('viewerCard');
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DÉTECTION D'AVATAR — prévisualisation et DNA
+// ═══════════════════════════════════════════════════════════════
+function compressImg(dataUrl, maxSide) {
+  maxSide = maxSide || REF_MAX_SIDE;
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      let { width: w, height: h } = img;
+      const s = Math.min(1, maxSide / Math.max(w, h));
+      w = Math.max(1, Math.round(w * s)); h = Math.max(1, Math.round(h * s));
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      const x = c.getContext('2d');
+      x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+      x.drawImage(img, 0, 0, w, h);
+      let url = c.toDataURL('image/jpeg', 0.85);
+      let q = 0.85;
+      while (url.length > 1.2 * 1024 * 1024 && q > 0.5) { q -= 0.1; url = c.toDataURL('image/jpeg', q); }
+      res(url);
+    };
+    img.onerror = () => res(dataUrl);
+    img.src = dataUrl;
+  });
+}
+async function handleCharFile(f, which) {
+  if (state.uiLocked) return;
+  if (!f) return;
+  if (!f.type.startsWith('image/')) { toast('Ce fichier n\'est pas une image', 'error'); return; }
+  if (f.size > 30 * 1024 * 1024) { toast('Image trop lourde (max 30 Mo)', 'error'); return; }
+  setStatus('Chargement de la photo…');
+  try {
+    const dataUrl = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result);
+      r.onerror = rej;
+      r.readAsDataURL(f);
+    });
+    const compressed = await compressImg(dataUrl);
+    if (which === 'A') { state.charA = compressed; storageSet(CHAR_A_STORAGE, JSON.stringify({ img: compressed, name: state.charAName })); }
+    else { state.charB = compressed; storageSet(CHAR_B_STORAGE, JSON.stringify({ img: compressed, name: state.charBName })); }
+    refreshCharPanel(which);
+    human('📷 Photo ' + which + ' chargée');
+    toast('Photo ' + which + ' chargée', 'success');
+  } catch (e) {
+    debug('Erreur photo : ' + e.message, 'err');
+    toast('Chargement impossible', 'error');
+  }
+  setStatus(null);
+}
+function refreshCharPanel(which) {
+  const img = which === 'A' ? state.charA : state.charB;
+  const imgEl = $(which === 'A' ? 'charAImg' : 'charBImg');
+  const phEl = $(which === 'A' ? 'charAPlaceholder' : 'charBPlaceholder');
+  const dnaEl = $(which === 'A' ? 'charADna' : 'charBDna');
+  const dna = which === 'A' ? state.charADna : state.charBDna;
+  if (img) { imgEl.src = img; imgEl.style.display = 'block'; phEl.style.display = 'none'; }
+  else { imgEl.removeAttribute('src'); imgEl.style.display = 'none'; phEl.style.display = 'block'; }
+  if (dna && dna.face_dna) {
+    dnaEl.className = 'cs-dna visible';
+    dnaEl.innerHTML = '<span class="ok">✓ Avatar ' + which + ' analysé</span><br>' + esc(trunc(dna.face_dna, 400));
+  } else { dnaEl.className = 'cs-dna'; dnaEl.innerHTML = ''; }
+  const n = (state.charA ? 1 : 0) + (state.charB ? 1 : 0);
+  $('charBadge').textContent = n + ' / 2';
+  updateGenBtn();
+}
+function removeChar(which) {
+  if (state.uiLocked) return;
+  if (which === 'A') { state.charA = null; state.charADna = null; storageDel(CHAR_A_STORAGE); $('charAInput').value = ''; }
+  else { state.charB = null; state.charBDna = null; storageDel(CHAR_B_STORAGE); $('charBInput').value = ''; }
+  refreshCharPanel(which);
+  toast('Photo ' + which + ' retirée', 'warn');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STYLE — Liste déroulante
+// ═══════════════════════════════════════════════════════════════
+function buildStyleDropdown() {
+  const sel = $('styleSelect');
+  let html = '';
+  STYLE_GROUPS.forEach(g => {
+    html += '<optgroup label="' + esc(g.group) + '">';
+    g.items.forEach(it => { html += '<option value="' + it.id + '">' + esc(it.name) + '</option>'; });
+    html += '</optgroup>';
+  });
+  sel.innerHTML = html;
+  sel.value = state.styleId;
+  sel.addEventListener('change', () => {
+    state.styleId = sel.value;
+    storageSet(STYLE_STORAGE, sel.value);
+    updateStyleDesc();
+  });
+  updateStyleDesc();
+}
+function updateStyleDesc() {
+  const s = currentStyle();
+  $('sdName').textContent = '🎨 ' + s.name;
+  $('sdMedium').textContent = s.medium;
+  $('sdBody').textContent = s.desc;
+  $('styleDesc').classList.add('visible');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BOUTON PRINCIPAL
+// ═══════════════════════════════════════════════════════════════
+function updateGenBtn() {
+  const btn = $('genBtn');
+  const hasInput = state.scenario.trim() || state.userPrompt.trim();
+  const ok = state.apiKeys.length > 0 && hasInput && !state.isRunning && !state.uiLocked;
+  btn.disabled = !ok;
+  if (state.isRunning) btn.textContent = 'Génération en cours…';
+  else if (state.apiKeys.length === 0) btn.textContent = 'Ajoutez une clé API';
+  else if (!hasInput) btn.textContent = 'Écrivez un scénario pour créer le film';
+  else btn.textContent = '▸ Créer le film (100 plans)';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PIPELINE COMPLET
+// ═══════════════════════════════════════════════════════════════
+async function runFullPipeline() {
+  if (state.isRunning || state.uiLocked) return;
+  if (state.apiKeys.length === 0) { toast('Validez vos clés API', 'error'); return; }
+  if (!state.scenario.trim() && !state.userPrompt.trim()) { toast('Écrivez un scénario', 'error'); return; }
+
+  state.isRunning = true;
+  state.stopRequested = false;
+  state.startTime = Date.now();
+  state.keyIndex = 0;
+  state.story = null;
+  state.plan = [];
+  state.viewerIndex = 0;
+  state.charADna = null;
+  state.charBDna = null;
+
+  setUILocked(true);
+  $('scenarioPanel').classList.remove('visible');
+  $('viewer').classList.remove('visible');
+  $('stopBtn').classList.remove('hidden');
+  $('phaseBar').classList.add('visible');
+  updateGenBtn();
+
+  human('🚀 Démarrage de la production…');
+  debug('Démarrage · ' + state.apiKeys.length + ' clé(s) · style=' + currentStyle().name + ' · photoA=' + (!!state.charA) + ' · photoB=' + (!!state.charB), 'ok');
+
+  try {
+    // ────── ÉTAPE 1 : Avatars ──────
+    if (state.charA || state.charB) {
+      setPhase('avatar', '🔍 Analyse des avatars…', '');
+      setStatus('Analyse des avatars…');
+      human('🔍 Analyse des avatars…');
+      const tasks = [];
+      if (state.charA) tasks.push(analyzeAvatar(state.charA, 'A', state.charAName).then(d => { state.charADna = d; refreshCharPanel('A'); return d; }));
+      if (state.charB) tasks.push(analyzeAvatar(state.charB, 'B', state.charBName).then(d => { state.charBDna = d; refreshCharPanel('B'); return d; }));
+      await Promise.all(tasks);
+      debug('Avatars OK', 'ok');
+      human('✅ Avatars analysés');
+    } else {
+      human('⏭ Pas de photo — avatars inventés');
+    }
+    if (state.stopRequested) throw new Error('Arrêt');
+
+    // ────── ÉTAPE 2 : Scénario + Histoire ──────
+    setPhase('story', '📝 Écriture du scénario…', '');
+    setStatus('Écriture du scénario…');
+    human('📝 Écriture du scénario…');
+    await analyzeStory(state.scenario.trim(), currentStyle(), state.charADna, state.charBDna, state.userPrompt.trim());
+    renderScenarioPanel();
+    debug('Scénario OK · « ' + state.story.title + ' »', 'ok');
+    human('✅ Scénario · « ' + state.story.title + ' » (' + state.story.characters.length + ' personnages, ' + state.story.locations.length + ' lieux)');
+    if (state.stopRequested) throw new Error('Arrêt');
+
+    // ────── ÉTAPE 3 : 100 plans ──────
+    await buildStoryboard();
+    if (state.stopRequested) throw new Error('Arrêt');
+    state.total = state.plan.length;
+
+    // ────── ÉTAPE 4 : Prêt ──────
+    setPhase('ready', '✦ Prêt — ' + state.plan.length + ' plans', '');
+    setStatus(null);
+    renderViewer();
+    human('✨ Terminé · ' + state.plan.length + ' plans en ' + fmtEta((Date.now() - state.startTime) / 1000));
+    debug('FIN · ' + state.plan.length + ' plans', 'ok');
+    toast(state.plan.length + ' plans prêts à copier', 'success', 4000);
+    $('viewer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (e) {
+    if (e.message === 'Arrêt') human('⏹ Arrêté');
+    else { debug('Erreur pipeline : ' + e.message, 'err'); human('❌ ' + e.message); toast('Erreur : ' + e.message, 'error', 4000); }
+  } finally {
+    state.isRunning = false;
+    state.stopRequested = false;
+    $('stopBtn').classList.add('hidden');
+    setUILocked(false);
+    setStatus(null);
+  }
+}
+
+function stopGeneration() {
+  if (!state.isRunning) return;
+  state.stopRequested = true;
+  human('⏹ Arrêt demandé…');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// OUTILS GLOBAUX
+// ═══════════════════════════════════════════════════════════════
+function copyAllShots() {
+  if (!state.plan.length) { toast('Aucun plan à copier', 'error'); return; }
+  const parts = [];
+  parts.push('╔══════════════════════════════════════════════════════════╗');
+  parts.push('║  FILM COMPLET — ' + (state.story ? state.story.title : 'Sans titre'));
+  parts.push('║  Style : ' + currentStyle().name);
+  parts.push('║  ' + state.plan.length + ' plans · prompts image + vidéo');
+  parts.push('╚══════════════════════════════════════════════════════════╝');
+  parts.push('');
+  if (state.story && state.story.logline) { parts.push('Logline : ' + state.story.logline); parts.push(''); }
+  state.plan.forEach(s => {
+    parts.push(buildFullShotText(s));
+    parts.push('');
+  });
+  copyToClipboard(parts.join('\n'), 'Script complet copié (' + state.plan.length + ' plans)');
+}
+function downloadAllShots() {
+  if (!state.plan.length) { toast('Aucun plan à télécharger', 'error'); return; }
+  const parts = [];
+  parts.push('FILM — ' + (state.story ? state.story.title : 'Sans titre'));
+  parts.push('Style : ' + currentStyle().name);
+  parts.push('');
+  if (state.story && state.story.logline) parts.push('Logline : ' + state.story.logline);
+  parts.push('');
+  parts.push('═'.repeat(60));
+  parts.push('');
+  state.plan.forEach(s => { parts.push(buildFullShotText(s)); parts.push(''); });
+  const blob = new Blob([parts.join('\n')], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const fname = ((state.story && state.story.title) || 'film').replace(/[^a-z0-9\-_ ]/gi, '_').trim().replace(/\s+/g, '_');
+  a.download = fname + '_storyboard.txt';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast('Fichier téléchargé', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LIAISONS
+// ═══════════════════════════════════════════════════════════════
+function bind() {
+  $('validateBtn').addEventListener('click', validateAndSaveKeys);
+  $('clearBtn').addEventListener('click', () => {
+    if (state.uiLocked) return;
+    $('keysInput').value = '';
+    state.apiKeys = [];
+    storageDel(KEYS_STORAGE);
+    $('keyStatus').className = 'status-line';
+    $('keyStatusText').textContent = 'Aucune clé enregistrée';
+    updateKeyBadge();
+    toast('Clés effacées', 'warn');
+  });
+
+  $('charAInput').addEventListener('change', (e) => { const f = e.target.files && e.target.files[0]; if (f) handleCharFile(f, 'A'); e.target.value = ''; });
+  $('charBInput').addEventListener('change', (e) => { const f = e.target.files && e.target.files[0]; if (f) handleCharFile(f, 'B'); e.target.value = ''; });
+  $('charARemoveBtn').addEventListener('click', () => removeChar('A'));
+  $('charBRemoveBtn').addEventListener('click', () => removeChar('B'));
+  $('charAName').addEventListener('input', (e) => {
+    state.charAName = e.target.value;
+    try { storageSet(CHAR_A_STORAGE, JSON.stringify({ img: state.charA || '', name: state.charAName })); } catch (er) {}
+  });
+  $('charBName').addEventListener('input', (e) => {
+    state.charBName = e.target.value;
+    try { storageSet(CHAR_B_STORAGE, JSON.stringify({ img: state.charB || '', name: state.charBName })); } catch (er) {}
+  });
+
+  $('scenarioInput').addEventListener('input', () => {
+    state.scenario = $('scenarioInput').value;
+    const w = state.scenario.trim() ? state.scenario.trim().split(/\s+/).length : 0;
+    $('scenarioBadge').textContent = w + ' mot' + (w > 1 ? 's' : '');
+    try { storageSet(SCENARIO_STORAGE, state.scenario); } catch (e) {}
+    updateGenBtn();
+  });
+  $('promptInput').addEventListener('input', () => {
+    state.userPrompt = $('promptInput').value;
+    const w = state.userPrompt.trim() ? state.userPrompt.trim().split(/\s+/).length : 0;
+    $('promptBadge').textContent = w + ' mot' + (w > 1 ? 's' : '');
+    try { storageSet(PROMPT_STORAGE, state.userPrompt); } catch (e) {}
+    updateGenBtn();
+  });
+
+  $('genBtn').addEventListener('click', runFullPipeline);
+  $('stopBtn').addEventListener('click', stopGeneration);
+
+  $('viewerPrevBtn').addEventListener('click', () => goToShot(state.viewerIndex - 1));
+  $('viewerNextBtn').addEventListener('click', () => goToShot(state.viewerIndex + 1));
+  $('viewerJumpBtn').addEventListener('click', () => {
+    const v = parseInt($('viewerJump').value, 10);
+    if (!isNaN(v)) goToShot(v - 1);
+  });
+  $('viewerJump').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); const v = parseInt($('viewerJump').value, 10); if (!isNaN(v)) goToShot(v - 1); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!state.plan.length) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goToShot(state.viewerIndex - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); goToShot(state.viewerIndex + 1); }
+  });
+
+  $('copyAllBtn').addEventListener('click', copyAllShots);
+  $('downloadBtn').addEventListener('click', downloadAllShots);
+
+  const handle = $('panelHandle');
+  const content = $('panelContent');
+  const toggleText = $('panelToggle');
+  let open = false;
+  handle.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') return;
+    open = !open;
+    content.classList.toggle('hidden', !open);
+    toggleText.textContent = (open ? '▲' : '▼') + ' CONSOLE';
+  });
+  $('copyConsoleBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const txt = state.debugLog.map(d => d.t + ' ' + d.m).join('\n');
+    copyToClipboard(txt, 'Console copiée');
+  });
+  $('clearConsoleBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    state.debugLog = [];
+    renderDebug();
+    toast('Console effacée', 'warn', 1200);
+  });
+
+  // Restauration
+  try {
+    const saved = JSON.parse(storageGet(KEYS_STORAGE) || '[]');
+    if (Array.isArray(saved) && saved.length > 0) {
+      state.apiKeys = saved;
+      $('keysInput').value = saved.join('\n');
+      $('keyStatus').className = 'status-line ok';
+      $('keyStatusText').textContent = saved.length + ' clé(s) restaurée(s)';
+    }
+  } catch (e) {}
+
+  try {
+    const cA = storageGet(CHAR_A_STORAGE);
+    if (cA) { const d = JSON.parse(cA); if (d.img) state.charA = d.img; state.charAName = d.name || ''; $('charAName').value = state.charAName; }
+  } catch (e) {}
+  try {
+    const cB = storageGet(CHAR_B_STORAGE);
+    if (cB) { const d = JSON.parse(cB); if (d.img) state.charB = d.img; state.charBName = d.name || ''; $('charBName').value = state.charBName; }
+  } catch (e) {}
+
+  try { const sc = storageGet(SCENARIO_STORAGE); if (sc) { state.scenario = sc; $('scenarioInput').value = sc; } } catch (e) {}
+  try { const sp = storageGet(PROMPT_STORAGE); if (sp) { state.userPrompt = sp; $('promptInput').value = sp; } } catch (e) {}
+  try { const st = storageGet(STYLE_STORAGE); if (st) state.styleId = st; } catch (e) {}
+
+  buildStyleDropdown();
+  refreshCharPanel('A');
+  refreshCharPanel('B');
+  // Update badges from restored values
+  $('scenarioInput').dispatchEvent(new Event('input'));
+  $('promptInput').dispatchEvent(new Event('input'));
+  updateKeyBadge();
+  updateGenBtn();
+
+  human('👋 Prêt. Clés → style → photos (optionnel) → scénario → Créer le film.');
+  debug('Visual.Studio v17 · FILM FACTORY (prompts only) · ' + STYLE_GROUPS.length + ' catégories · ' + STYLE_GROUPS.reduce((a, g) => a + g.items.length, 0) + ' styles', 'api');
+  debug('Total cible : ' + SHOTS_TOTAL + ' plans en ' + SHOT_CHUNKS + ' actes de ' + SHOTS_PER_CHUNK, 'api');
+  if (!STORAGE_OK) debug('Stockage indisponible : session uniquement', 'warn');
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+else bind();
+</script>
+</body>
+</html>
